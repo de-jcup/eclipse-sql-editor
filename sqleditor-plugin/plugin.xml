@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          KEYWORDS                                    -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <extension point="org.eclipse.ui.keywords">
+     <keyword
+   		id="sqleditor.preferences.keyword.SQL"
+   		label="SQL">
+     </keyword>
+      <keyword
+   		id="sqleditor.preferences.keyword.color"
+   		label="color">
+     </keyword>
+     <keyword
+   		id="sqleditor.preferences.keyword.editor"
+   		label="editor">
+     </keyword>
+     <keyword
+   		id="sqleditor.preferences.keyword.validation"
+   		label="validation">
+     </keyword>
+    
+   </extension>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          EDITOR                                      -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+      		name="SQL Editor"
+            extensions="sql"
+            icon="icons/sql-editor.png"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="de.jcup.sqleditor.SQLEditor"
+            id="sqleditor.editors.SQLEditor">
+      </editor>
+   </extension>
+   
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          MARKER                          			 -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --> 
+   <extension 
+   		id="de.jcup.sqleditor.script.problem"
+    	point="org.eclipse.core.resources.markers"
+    	name="SQLeditor script problem">
+        <super type="org.eclipse.core.resources.problemmarker"/>
+        <super type="org.eclipse.core.resources.textmarker"/>
+        <persistent value="false"/>
+    </extension>
+   
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          CONTEXT                                     -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <extension point="org.eclipse.ui.contexts">
+	  <context
+	        name="SQL context"
+	        description="Editing SQL files"
+	        parentId="org.eclipse.ui.textEditorScope"
+	        id="org.sqleditor.editors.SQLEditor.context">
+	        
+	  </context>
+   </extension>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          COMMANDS                                    -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->^
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            description="SQL editor"
+            id="sqleditor.commands.category"
+            name="SQL editor">
+      </category>
+   </extension>
+   
+   <extension point="org.eclipse.ui.commands">
+   	   <command
+            name="Quick outline"
+            description="Show quick outline dialog"
+            categoryId="sqleditor.commands.category"
+            id="sqleditor.editor.commands.quickoutline">
+      </command>
+      <command
+            name="Toggle comment"
+            description="Toggle comment in selected line(s)"
+            categoryId="sqleditor.commands.category"
+            id="sqleditor.editor.commands.source.toggleComment">
+      </command>
+      <command
+            name="Goto matching bracket"
+            description="Goto matching bracket inside gradle document"
+            categoryId="sqleditor.commands.category"
+            id="sqleditor.editor.commands.gotomatchingbracket">
+      </command>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+	 <handler
+            commandId="sqleditor.editor.commands.quickoutline"
+            class="de.jcup.sqleditor.handlers.OpenQuickOutlineHandler">
+      </handler>
+      <handler
+            commandId="sqleditor.editor.commands.source.toggleComment"
+            class="de.jcup.sqleditor.handlers.ToggleCommentHandler">
+      </handler>
+       <handler
+            commandId="sqleditor.editor.commands.gotomatchingbracket"
+            class="de.jcup.sqleditor.handlers.GotoMatchingBracketHandler">
+      </handler>
+    </extension> 
+    
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          KEY BINDING                                 -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <extension point="org.eclipse.ui.bindings">
+   		<key
+            sequence="M1+O"
+            contextId="org.sqleditor.editors.SQLEditor.context"
+            commandId="sqleditor.editor.commands.quickoutline"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">	  
+		</key>
+		<key
+            sequence="M1+7"
+            contextId="org.sqleditor.editors.SQLEditor.context"
+            commandId="sqleditor.editor.commands.source.toggleComment"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">	  
+		</key>
+		<key
+            sequence="M1+M2+P"
+            contextId="org.sqleditor.editors.SQLEditor.context"
+            commandId="sqleditor.editor.commands.gotomatchingbracket"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">	  
+		</key>
+    </extension> 
+    
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          MENU                                 -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <extension point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.sqleditor.editors.SQLEditor.context?after=additions">
+         <command
+               commandId="sqleditor.editor.commands.quickoutline"
+               >
+         </command>
+      </menuContribution>
+      
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=edit">
+            
+         <menu
+               id="sqleditor.editor.menu.sourceMenu"
+               label="Source"
+               mnemonic="S"
+               >
+               <visibleWhen checkEnabled="true">
+                     <with variable="activeEditor">
+                     	<instanceof
+                            value="de.jcup.sqleditor.SQLEditor"/>
+                     </with>
+               </visibleWhen>
+            <command commandId="sqleditor.editor.commands.source.toggleComment">
+            </command>
+         </menu>
+      </menuContribution>
+      
+      </extension> 
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          PREFERENCES                                 -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <extension
+      point = "org.eclipse.ui.preferencePages">
+      <page
+         id="sqleditor.eclipse.gradleeditor.preferences.SQLEditorEditorPreferencePage"
+         class="de.jcup.sqleditor.preferences.SQLEditorPreferencePage"
+         name="SQL Editor"
+         >
+         <keywordReference
+               id="sqleditor.preferences.keyword.SQL">
+         </keywordReference>
+          <keywordReference
+               id="sqleditor.preferences.keyword.editor">
+         </keywordReference>
+      </page>
+      <page
+         id="sqleditor.eclipse.gradleeditor.preferences.SQLEditorEditorSyntaxColorPreferencePage"
+         class="de.jcup.sqleditor.preferences.SQLEditorSyntaxColorPreferencePage"
+         name="Syntax coloring"
+         category="sqleditor.eclipse.gradleeditor.preferences.SQLEditorEditorPreferencePage">
+         <keywordReference
+               id="sqleditor.preferences.keyword.SQL">
+         </keywordReference>
+          <keywordReference
+               id="sqleditor.preferences.keyword.color">
+         </keywordReference>
+      </page>
+    </extension>
+    <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="de.jcup.sqleditor.preferences.SQLEditorPreferenceInitializer">
+      </initializer>
+   </extension>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          MARKER                          			 -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --> 
+   <extension 
+   		id="de.jcup.sqleditor.parse.error"
+    	point="org.eclipse.core.resources.markers"
+    	name="SQL editor parse error">
+        <super type="org.eclipse.core.resources.problemmarker"/>
+        <super type="org.eclipse.core.resources.textmarker"/>
+        <persistent value="true"/>
+    </extension>
+    
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          HELP                                         -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml">
+      </toc>
+      <toc
+            file="EditorToc.xml"
+            primary="true">
+      </toc>
+   </extension>
+   
+</plugin>
