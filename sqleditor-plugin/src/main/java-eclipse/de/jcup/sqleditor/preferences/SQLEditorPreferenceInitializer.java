@@ -35,6 +35,7 @@ public class SQLEditorPreferenceInitializer extends AbstractPreferenceInitialize
 		
 		/* Outline */
 		store.setDefault(P_LINK_OUTLINE_WITH_EDITOR.getId(), true);
+		store.setDefault(P_ENABLE_OUTLINE.getId(), true);
 		
 		/* ++++++++++++ */
 		/* + Brackets + */

@@ -71,6 +71,7 @@ public class SQLEditorPreferencePage extends FieldEditorPreferencePage implement
 	private BooleanFieldEditor autoCreateEndBrackets;
 	private BooleanFieldEditor codeAssistWithSQLKeywords;
 	private BooleanFieldEditor codeAssistWithSimpleWords;
+    private BooleanFieldEditor outlineEnabled;
 
 	public SQLEditorPreferencePage() {
 		super(GRID);
@@ -121,6 +122,13 @@ public class SQLEditorPreferencePage extends FieldEditorPreferencePage implement
 		otherLayout.marginHeight = 0;
 		otherComposite.setLayout(otherLayout);
 
+		/* outline enabled or not*/
+		outlineEnabled= new BooleanFieldEditor(P_ENABLE_OUTLINE.getId(),
+                "Outline enabled", otherComposite);
+		outlineEnabled.getDescriptionControl(otherComposite)
+        .setToolTipText("If you do not like/use the outline feature for SQL you can turn it off here.");
+        addField(outlineEnabled);
+		
 		/* linking with outline */
 		linkEditorWithOutline = new BooleanFieldEditor(P_LINK_OUTLINE_WITH_EDITOR.getId(),
 				"New opened editors are linked with outline", otherComposite);

@@ -33,6 +33,8 @@ public enum SQLEditorPreferenceConstants implements PreferenceIdentifiable{
 	P_TOOLTIPS_ENABLED("toolTipsEnabled"),
 	P_CODE_ASSIST_ADD_KEYWORDS("codeAssistAddsKeyWords"),
 	P_CODE_ASSIST_ADD_SIMPLEWORDS("codeAssistAddsSimpleWords"),
+
+	P_ENABLE_OUTLINE("outlineEnabled"),
 	
 	;
 

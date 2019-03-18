@@ -21,6 +21,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
 import de.jcup.sqleditor.script.SQLStatement;
+import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 import de.jcup.sqleditor.script.SQLScriptModel;
 
 public class SQLEditorTreeContentProvider implements ITreeContentProvider {
@@ -39,6 +40,9 @@ public class SQLEditorTreeContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 		synchronized (monitor) {
+		    if (! SQLEditorPreferences.getInstance().isOutlineEnabled()) {
+	            return new Object[] { "Outline disabled in preferences"};
+	        }
 			if (inputElement instanceof SQLScriptModel) {
 			    if (items != null && items.length > 0) {
 			        return items;

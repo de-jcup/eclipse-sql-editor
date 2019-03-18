@@ -125,6 +125,10 @@ public class SQLEditorPreferences {
 		return getBooleanPreference(P_LINK_OUTLINE_WITH_EDITOR);
 	}
 	
+	public boolean isOutlineEnabled() {
+        return getBooleanPreference(P_ENABLE_OUTLINE);
+    }
+	
 	public IPreferenceStore getPreferenceStore() {
 		return store;
 	}
