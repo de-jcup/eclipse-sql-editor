@@ -69,7 +69,7 @@ public class SQLEditorOutlineLabelProvider extends BaseLabelProvider implements 
 			}
 
 			switch (type) {
-			case LABEL:
+			case STATEMENT:
 				return getOutlineImage(ICON_FUNCTION);
 			case META_ERROR:
 				return getOutlineImage(ICON_ERROR);
@@ -92,10 +92,12 @@ public class SQLEditorOutlineLabelProvider extends BaseLabelProvider implements 
 			Item item = (Item) element;
 
 			ItemType itemType = item.getItemType();
-			if (itemType==ItemType.LABEL){
+			if (itemType==ItemType.STATEMENT){
 				
-				StyledString typeString = new StyledString("label ", outlineItemTypeStyler);
-				styled.append(typeString);
+//				StyledString typeString = new StyledString("label ", outlineItemTypeStyler);
+//				styled.append(typeString);
+			    StyledString typeString = new StyledString(item.getOffset()+": "+item.getEndOffset()+"-", outlineItemTypeStyler);
+                styled.append(typeString);
 			}else if (itemType==ItemType.META_DEBUG){
 				StyledString typeString = new StyledString(item.getOffset()+": ", outlineItemTypeStyler);
 				styled.append(typeString);

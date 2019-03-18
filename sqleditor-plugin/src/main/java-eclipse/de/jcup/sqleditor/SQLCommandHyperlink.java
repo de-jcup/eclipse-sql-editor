@@ -20,16 +20,16 @@ import static org.eclipse.core.runtime.Assert.*;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 
-import de.jcup.sqleditor.script.SQLCommand;
+import de.jcup.sqleditor.script.SQLStatement;
 
 public class SQLCommandHyperlink implements IHyperlink {
 
 	private IRegion region;
-	private SQLCommand function;
+	private SQLStatement function;
 	private SQLEditor editor;
 	
 
-	public SQLCommandHyperlink(IRegion region, SQLCommand function, SQLEditor editor) {
+	public SQLCommandHyperlink(IRegion region, SQLStatement function, SQLEditor editor) {
 		isNotNull(region, "Gradle hyperlink region may not be null!");
 		isNotNull(function, "function may not be null!");
 		isNotNull(editor, "editor may not be null!");

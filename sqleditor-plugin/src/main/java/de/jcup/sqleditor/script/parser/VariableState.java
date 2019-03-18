@@ -13,15 +13,10 @@
  * and limitations under the License.
  *
  */
- package de.jcup.sqleditor.outline;
+ package de.jcup.sqleditor.script.parser;
 
-public enum ItemType {
-	
-	STATEMENT, 
-	
-	META_INFO, 
-	
-	META_ERROR,
-	
-	META_DEBUG
+public enum VariableState {
+	NO_ARRAY,
+	ARRAY_OPENED,
+	ARRAY_CLOSED,
 }

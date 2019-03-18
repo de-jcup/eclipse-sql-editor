@@ -13,15 +13,11 @@
  * and limitations under the License.
  *
  */
- package de.jcup.sqleditor.outline;
+ package de.jcup.sqleditor.script.parser;
 
-public enum ItemType {
-	
-	STATEMENT, 
-	
-	META_INFO, 
-	
-	META_ERROR,
-	
-	META_DEBUG
+public class TestParseToken extends ParseToken{
+
+	public TestParseToken(String text){
+		super(text);
+	}
 }

@@ -2,16 +2,10 @@ package de.jcup.sqleditor.script;
 
 import static org.junit.Assert.*;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import de.jcup.sqleditor.TestScriptLoader;
-import de.jcup.sqleditor.script.SQLCommand;
-import de.jcup.sqleditor.script.SQLScriptModel;
-import de.jcup.sqleditor.script.SQLScriptModelBuilder;
 
 public class SQLScriptModelBuilderTest {
 
@@ -23,291 +17,146 @@ public class SQLScriptModelBuilderTest {
 	}
 
 	@Test
-	public void colon_space__is_not_returned_as_label() {
-		/* execute */
-		SQLScriptModel result = builderToTest.build(": ");
-
-		/* test */
-		assertTrue(result.getLabels().isEmpty());
-
-	}
-
-	@Test
-	public void colon_label_space__is_returned_as_label_pos_1_end_5() {
-		/* execute */
-		SQLScriptModel result = builderToTest.build(":label ");
-
-		/* test */
-		assertEquals(1, result.getLabels().size());
-		SQLCommand label = result.getLabels().iterator().next();
-		assertEquals("label", label.getName());
-		assertEquals(1, label.getPosition());
-		assertEquals(5, label.getEnd());
-
-	}
-
-	@Test
-	public void colon_label_is_returned_as_label_pos_1_end_5() {
-		/* execute */
-		SQLScriptModel result = builderToTest.build(":label");
-
-		/* test */
-		assertEquals(1, result.getLabels().size());
-		SQLCommand label = result.getLabels().iterator().next();
-		assertEquals("label", label.getName());
-		assertEquals(1, label.getPosition());
-		assertEquals(5, label.getEnd());
-
-	}
-
-	@Test
-	public void bugfix_11_script_has_3_labels() throws Exception {
-		/* execute */
-		String script = TestScriptLoader.loadScriptFromTestScripts("bugfix_11.bat");
-		SQLScriptModel result = builderToTest.build(script);
-
-		/* test */
-		assertNotNull(result);
-		List<SQLCommand> labels = result.getLabels();
-		assertEquals(3, labels.size());
-	}
-
-	@Test
-	public void text_empty_returns_model_without_labels() {
-		/* execute */
-		SQLScriptModel result = builderToTest.build(null);
-
-		/* test */
-		assertNotNull(result);
-		assertTrue(result.getLabels().isEmpty());
-	}
-
-	@Test
-	public void text_null_returns_model_without_labels() {
-		/* execute */
-		SQLScriptModel result = builderToTest.build(null);
-
-		/* test */
-		assertNotNull(result);
-		assertTrue(result.getLabels().isEmpty());
-	}
-
-	@Test
-	public void text_test_returns_model_without_labels() {
+	public void select_all_from_table1_results_in_select_item() {
 		/* prepare */
-		StringBuilder sb = new StringBuilder();
-		sb.append("test");
-		String text = sb.toString();
-
+	    String sql = "SELECT * from TABLE1";
+	    
 		/* execute */
-		SQLScriptModel result = builderToTest.build(text);
+		SQLScriptModel result = builderToTest.build(sql);
 
 		/* test */
 		assertNotNull(result);
-		assertTrue(result.getLabels().isEmpty());
-	}
+		List<SQLStatement> sqlCommands = result.getSQLStatements();
+		assertEquals(1,sqlCommands.size());
+		SQLStatement command = sqlCommands.get(0);
+		assertEquals("SELECT * from TABLE1", command.getName());
 
+	}
+	
 	@Test
-	public void text_colon_test_returns_model_with_label_test() {
-		/* prepare */
-		StringBuilder sb = new StringBuilder();
-		sb.append(":test");
-		// 01234
-		String text = sb.toString();
+    public void select_12345678_from_table1_results_in_select_item() {
+        /* prepare */
+        String sql = "SELECT 12345678 from TABLE1";
+        
+        /* execute */
+        SQLScriptModel result = builderToTest.build(sql);
 
-		/* execute */
-		SQLScriptModel result = builderToTest.build(text);
+        /* test */
+        assertNotNull(result);
+        List<SQLStatement> sqlCommands = result.getSQLStatements();
+        assertEquals(1,sqlCommands.size());
+        SQLStatement command = sqlCommands.get(0);
+        assertEquals("SELECT 12345678 from TABLE1", command.getName());
 
-		/* test */
-		assertNotNull(result);
-		assertEquals(1, result.getLabels().size());
-		SQLCommand label = result.getLabels().iterator().next();
-		assertNotNull(label);
-
-		assertEquals("test", label.getName());
-		assertEquals(1, label.getPosition());
-		assertEquals(4, label.getEnd());
-		assertEquals(4, label.getLengthToNameEnd());
-	}
-
+    }
+	
 	@Test
-	public void text_space_colon_test_returns_model_with_no_labels() {
-		/* prepare */
-		StringBuilder sb = new StringBuilder();
-		sb.append(" :test");
-		// 012345
-		String text = sb.toString();
+    public void select_123456789_from_table1_results_in_select_item_with_reduced_info() {
+        /* prepare */
+        String sql = "SELECT 123456789 FROM TABLE1";
+        
+        /* execute */
+        SQLScriptModel result = builderToTest.build(sql);
 
-		/* execute */
-		SQLScriptModel result = builderToTest.build(text);
+        /* test */
+        assertNotNull(result);
+        List<SQLStatement> sqlCommands = result.getSQLStatements();
+        assertEquals(1,sqlCommands.size());
+        SQLStatement command = sqlCommands.get(0);
+        assertEquals("SELECT {..} FROM TABLE1", command.getName());
 
-		/* test */
-		assertNotNull(result);
-		assertTrue(result.getLabels().isEmpty());
-
-	}
-
+    }
+	
 	@Test
-	public void text_abc_colon_test_returns_model_with_no_labels() {
-		/* prepare */
-		StringBuilder sb = new StringBuilder();
-		sb.append("abc:test");
+    public void create_table_1() {
+        /* prepare */
+        String sql = "create\n table \nTABLE1\n(test varchar(45))";
+        
+        /* execute */
+        SQLScriptModel result = builderToTest.build(sql);
 
-		String text = sb.toString();
+        /* test */
+        assertNotNull(result);
+        List<SQLStatement> sqlCommands = result.getSQLStatements();
+        assertEquals(1,sqlCommands.size());
+        SQLStatement command = sqlCommands.get(0);
+        assertEquals("create table TABLE1", command.getName());
 
-		/* execute */
-		SQLScriptModel result = builderToTest.build(text);
-
-		/* test */
-		assertNotNull(result);
-		assertTrue(result.getLabels().isEmpty());
-
-	}
-
+    }
 	@Test
-	public void text_colon_colon_test_returns_model_with_no_labels() {
-		/* prepare */
-		StringBuilder sb = new StringBuilder();
-		sb.append("::test");
+    public void create_table_1_drop_table1() {
+        /* prepare */
+        String sql = "CREATE\n TABLE \nTABLE1\n(test varchar(45));\n"
+                + "drop TABLE TABLE1";
+        
+        /* execute */
+        SQLScriptModel result = builderToTest.build(sql);
 
-		String text = sb.toString();
+        /* test */
+        assertNotNull(result);
+        List<SQLStatement> sqlCommands = result.getSQLStatements();
+        assertEquals(2,sqlCommands.size());
+        int i=0;
+        assertEquals("CREATE TABLE TABLE1", sqlCommands.get(i++).getName());
+        assertEquals("drop TABLE TABLE1", sqlCommands.get(i++).getName());
 
-		/* execute */
-		SQLScriptModel result = builderToTest.build(text);
-
-		/* test */
-		assertNotNull(result);
-		assertTrue(result.getLabels().isEmpty());
-
-	}
-
+    }
+	
 	@Test
-	public void text_abc_new_line_colon_test_returns_model_with_label_test() {
-		/* prepare */
-		StringBuilder sb = new StringBuilder();
-		sb.append("abc\n");
-		// 0123
-		sb.append(":test2");
-		// 456789
-		String text = sb.toString();
+    public void select_table2_create_table_1_drop_table1() {
+        /* prepare */
+        String sql = "SELECT userId,more FROM TABLE2;CREATE\n TABLE \nTABLE1\n(test varchar(45));\n"
+                + "DROP table Table1";
+        
+        /* execute */
+        SQLScriptModel result = builderToTest.build(sql);
 
-		/* execute */
-		SQLScriptModel result = builderToTest.build(text);
+        /* test */
+        assertNotNull(result);
+        List<SQLStatement> sqlCommands = result.getSQLStatements();
+        int i=0;
+        assertEquals(3,sqlCommands.size());
+        assertEquals("SELECT {..} FROM TABLE2", sqlCommands.get(i++).getName());
+        assertEquals("CREATE TABLE TABLE1", sqlCommands.get(i++).getName());
+        assertEquals("DROP table Table1", sqlCommands.get(i++).getName());
 
-		/* test */
-		assertNotNull(result);
-		List<SQLCommand> labels = result.getLabels();
-		assertEquals(1, labels.size());
-		SQLCommand label = labels.iterator().next();
-		assertNotNull(label);
-
-		assertEquals("test2", label.getName());
-		assertEquals(5, label.getPosition());
-		assertEquals(9, label.getEnd());
-		assertEquals(5, label.getLengthToNameEnd());
-
-	}
-
+    }
+	
 	@Test
-	public void text_ab_cr_new_line_colon_test_returns_model_with_label_test() {
-		/* prepare */
-		StringBuilder sb = new StringBuilder();
-		sb.append("ab\r\n");
-		// 012 3
-		sb.append(":test2");
-		// 456789
-		String text = sb.toString();
+	public void alter_table_x_add_constraint__add_is_a_substatement() {
+	    /* prepare */
+        String sql = "ALTER TABLE adm_project ADD CONSTRAINT c07_adm_project2owner FOREIGN KEY";
+        
+        /* execute */
+        SQLScriptModel result = builderToTest.build(sql);
 
-		/* execute */
-		SQLScriptModel result = builderToTest.build(text);
-
-		/* test */
-		assertNotNull(result);
-		List<SQLCommand> labels = result.getLabels();
-		assertEquals(1, labels.size());
-		SQLCommand label = labels.iterator().next();
-		assertNotNull(label);
-
-		assertEquals("test2", label.getName());
-		assertEquals(5, label.getPosition());
-		assertEquals(9, label.getEnd());
-		assertEquals(5, label.getLengthToNameEnd());
-
+        /* test */
+        assertNotNull(result);
+        List<SQLStatement> sqlCommands = result.getSQLStatements();
+        assertEquals(1,sqlCommands.size());
+        SQLStatement command = sqlCommands.get(0);
+        List<SQLStatement> subs = command.getSubStatements();
+        assertNotNull(subs);
+        assertEquals(1,subs.size());
+        assertTrue(subs.get(0).getName().startsWith("ADD"));
 	}
-
+	
 	@Test
-	public void text_abc_new_line_colon_test_new_line_def_bla_newline_colon_test2_returns_model_with_labels_test_and_test2() {
-		/* prepare */
-		StringBuilder sb = new StringBuilder();
-		sb.append("abc\n");
-		// 0123
-		sb.append(":test\n");
-		// 456789
-		sb.append("def bla\n");
-		// 01234567
-		sb.append(":test2\n");
-		// 8901234
+    public void two_selects_results_in_2_select_statements() {
+        /* prepare */
+        String sql = "SELECT * FROM TABLE1;\nSELECT * FROM table2;";
+        
+        /* execute */
+        System.out.println("test two lines");
+        SQLScriptModel result = builderToTest.build(sql);
 
-		String text = sb.toString();
+        /* test */
+        assertNotNull(result);
+        List<SQLStatement> sqlCommands = result.getSQLStatements();
+        int i=0;
+        assertEquals(2,sqlCommands.size());
+        assertEquals("SELECT * FROM TABLE1", sqlCommands.get(i++).getName());
+        assertEquals("SELECT * FROM table2", sqlCommands.get(i++).getName());
 
-		/* execute */
-		SQLScriptModel result = builderToTest.build(text);
-
-		/* test */
-		assertNotNull(result);
-		assertEquals(2, result.getLabels().size());
-		Iterator<SQLCommand> iterator = result.getLabels().iterator();
-		SQLCommand label = iterator.next();
-		assertNotNull(label);
-
-		assertEquals("test", label.getName());
-		assertEquals(5, label.getPosition());
-		assertEquals(8, label.getEnd());
-		assertEquals(4, label.getLengthToNameEnd());
-
-		label = iterator.next();
-		assertEquals("test2", label.getName());
-		assertEquals(19, label.getPosition());
-		assertEquals(23, label.getEnd());
-		assertEquals(5, label.getLengthToNameEnd());
-
-	}
-
-	@Test
-	public void text_ab_cr_new_line_colon_tes_cr_new_line_def_bla_newline_colon_test2_returns_model_with_labels_test_and_test2() {
-		/* prepare */
-		StringBuilder sb = new StringBuilder();
-		sb.append("ab\r\n");
-		// 0123
-		sb.append(":test\r\n");
-		// 456789 0
-		sb.append("def bl\r\n");
-		// 1234567 8
-		sb.append(":test2\r\n");
-		// 9012345 6
-
-		String text = sb.toString();
-
-		/* execute */
-		SQLScriptModel result = builderToTest.build(text);
-
-		/* test */
-		assertNotNull(result);
-		assertEquals(2, result.getLabels().size());
-		Iterator<SQLCommand> iterator = result.getLabels().iterator();
-		SQLCommand label = iterator.next();
-		assertNotNull(label);
-
-		assertEquals("test", label.getName());
-		assertEquals(5, label.getPosition());
-		assertEquals(8, label.getEnd());
-		assertEquals(4, label.getLengthToNameEnd());
-
-		label = iterator.next();
-		assertEquals("test2", label.getName());
-		assertEquals(20, label.getPosition());
-		assertEquals(24, label.getEnd());
-		assertEquals(5, label.getLengthToNameEnd());
-
-	}
+    }
 }

@@ -24,7 +24,7 @@ import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.hyperlink.AbstractHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 
-import de.jcup.sqleditor.script.SQLCommand;
+import de.jcup.sqleditor.script.SQLStatement;
 
 /**
  * Hyperlink detector for all kind of hyperlinks in egradle editor.
@@ -86,7 +86,7 @@ public class SQLHyperlinkDetector extends AbstractHyperlinkDetector {
 			// handle goto :xxx like goto xxx
 			functionName=functionName.substring(1);
 		}
-		SQLCommand function = editor.findSQLLabel(functionName);
+		SQLStatement function = editor.findSQLLabel(functionName);
 		if (function == null) {
 			return null;
 		}

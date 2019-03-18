@@ -66,7 +66,7 @@ import de.jcup.sqleditor.outline.SQLEditorContentOutlinePage;
 import de.jcup.sqleditor.outline.SQLEditorTreeContentProvider;
 import de.jcup.sqleditor.outline.SQLQuickOutlineDialog;
 import de.jcup.sqleditor.preferences.SQLEditorPreferences;
-import de.jcup.sqleditor.script.SQLCommand;
+import de.jcup.sqleditor.script.SQLStatement;
 import de.jcup.sqleditor.script.SQLScriptModel;
 import de.jcup.sqleditor.script.SQLScriptModelBuilder;
 
@@ -605,13 +605,13 @@ public class SQLEditor extends TextEditor implements StatusMessageSupport, IReso
 		
 	}
 
-	public SQLCommand findSQLLabel(String labelName) {
+	public SQLStatement findSQLLabel(String labelName) {
 		if (labelName==null){
 			return null;
 		}
 		SQLScriptModel model = buildModelWithoutValidation();
-		Collection<SQLCommand> labels = model.getLabels();
-		for (SQLCommand label:labels){
+		Collection<SQLStatement> labels = model.getSQLStatements();
+		for (SQLStatement label:labels){
 			if (labelName.equals(label.getName())){
 				return label;
 			}

@@ -13,15 +13,20 @@
  * and limitations under the License.
  *
  */
- package de.jcup.sqleditor.outline;
+ package de.jcup.sqleditor.script;
 
-public enum ItemType {
+public interface ValidationResult {
 	
-	STATEMENT, 
+	public enum Type{
+		ERROR
+	}
+
+	int getStart();
+
+	int getEnd();
+
+	String getMessage();
 	
-	META_INFO, 
+	Type getType();
 	
-	META_ERROR,
-	
-	META_DEBUG
 }

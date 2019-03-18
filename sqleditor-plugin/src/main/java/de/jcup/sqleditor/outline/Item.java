@@ -15,6 +15,9 @@
  */
  package de.jcup.sqleditor.outline;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Item {
 
 	ItemType type;
@@ -22,6 +25,8 @@ public class Item {
 	int offset;
 	int length;
 	int endOffset;
+    private List<Item> children;
+    private Item parent;
 	
 	/**
 	 * @return item type , or <code>null</code>
@@ -29,8 +34,30 @@ public class Item {
 	public ItemType getItemType(){
 		return type;
 	}
+	
+	public List<Item> getChildren(){
+	    if (children==null) {
+	        children=new ArrayList<>();
+	    }
+	    return children;
+	}
+	
+	public String buildSearchString() {
+        return name;
+    }
 
-	public String getName() {
+    public boolean hasChildren() {
+        return children!=null && !children.isEmpty();
+    }
+	
+	void setParent(Item item) {
+        this.parent=item;
+    }
+	public Item getParent() {
+        return parent;
+    }
+
+    public String getName() {
 		return name;
 	}
 
@@ -63,7 +90,5 @@ public class Item {
 		return sb.toString();
 	}
 
-	public String buildSearchString() {
-		return name;
-	}
+	
 }

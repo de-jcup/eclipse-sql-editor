@@ -54,8 +54,6 @@ subprojects {
 			
 		testCompile library.junit
 		testCompile library.mockito_all
-		// https://mvnrepository.com/artifact/com.github.jsqlparser/jsqlparser
-        compile group: 'com.github.jsqlparser', name: 'jsqlparser', version: '1.4'
 		
 	}
 	

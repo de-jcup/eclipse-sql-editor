@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Albert Tregnaghi
+ * Copyright 2018 Albert Tregnaghi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,27 @@
  * and limitations under the License.
  *
  */
- package de.jcup.sqleditor.outline;
+package de.jcup.sqleditor.script.parser;
 
-public enum ItemType {
-	
-	STATEMENT, 
-	
-	META_INFO, 
-	
-	META_ERROR,
-	
-	META_DEBUG
+public interface CodePosSupport {
+
+	/**
+	 * Moves to new position
+	 * @param newPos
+	 */
+	void moveToPos(int newPos);
+
+	/**
+	 * Get initial start position inside code fragment
+	 * @return start position
+	 */
+	int getInitialStartPos();
+
+	/**
+	 * Gives back character at wanted position, or <code>null</code>
+	 * @param pos
+	 * @return character at wanted position, or <code>null</code>
+	 */
+	Character getCharacterAtPosOrNull(int pos);
+
 }

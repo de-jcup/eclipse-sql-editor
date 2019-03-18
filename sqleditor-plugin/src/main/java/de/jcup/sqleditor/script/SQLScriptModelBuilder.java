@@ -1,74 +1,127 @@
 package de.jcup.sqleditor.script;
 
+import java.util.Iterator;
+import java.util.List;
+
+import de.jcup.sqleditor.script.parser.ParseToken;
+import de.jcup.sqleditor.script.parser.TokenParser;
+import de.jcup.sqleditor.script.parser.TokenParserException;
+
 public class SQLScriptModelBuilder {
 
-	private class SQLscriptContext {
-		int pos = 0;
-		int labelStart = 0;
-		int posAtLine = 0;
-	}
+    private static final int MAXIMUM_SELECT_PROJECTION_SIZE_SHOWN = 8+1;//+1 because of space always added in logic
 
-	public SQLScriptModel build(String text) {
-		SQLScriptModel model = new SQLScriptModel();
-		if (text == null || text.trim().length() == 0) {
-			return model;
-		}
-		String inspect = text + "\n";// a simple workaround to get the last
-										// label accessed too, if there is no
-										// next line...
-		/*
-		 * very simple approach: a label is identified by being at first
-		 * position of line
-		 */
-		StringBuilder labelSb = null;
-		SQLscriptContext context = new SQLscriptContext();
-		for (char c : inspect.toCharArray()) {
-			if (c == '\n' || c == '\r') {
-				/* terminate search - got the label or none*/
-				addLabelDataWhenExisting(model, labelSb, context);
-				labelSb = null;
-				continue;
-			}
-			if (c == ':') {
-				if (context.posAtLine == 0) {
-					labelSb = new StringBuilder();
-					context.labelStart = context.pos;
-				} else {
-					/* :: detected - reset */
-					labelSb = null;
-				}
-			} else {
-				if (labelSb != null) {
-					if (Character.isWhitespace(c)) {
-						addLabelDataWhenExisting(model, labelSb, context);
-						labelSb = null;
-						continue;
-					} else {
-						labelSb.append(c);
-					}
-				}
-			}
-			context.pos++;
-			context.posAtLine++;
-		}
+    public SQLScriptModel build(String sql) {
+        SQLScriptModel model = new SQLScriptModel();
+        if (sql == null || sql.trim().length() == 0) {
+            return model;
+        }
+        TokenParser parser = new TokenParser();
+        try {
+            List<ParseToken> tokens = parser.parse(sql);
+            boolean newStatement = true;
+            for (Iterator<ParseToken> it = tokens.iterator(); it.hasNext();) {
 
-		return model;
-	}
+                /* start */
+                if (it.hasNext()) {
+                    ParseToken token = it.next();
+                    if (token.isEndOfStatement()) {
+                        newStatement = true;
+                        continue;
+                    }
+                    if (token.isComment()) {
+                        /* ignore in any case */
+                        continue;
+                    }
+                    if (!newStatement) {
+                        /* just ignore */
+                        continue;
+                    }
+                    SQLStatement statement = new SQLStatement(token.getText(),model);
+                    token = handleStatement(model.statements, statement, token, it);
 
-	protected void addLabelDataWhenExisting(SQLScriptModel model, StringBuilder labelSb, SQLscriptContext context) {
-		if (labelSb != null) {
-			String labelName = labelSb.toString().trim();
-			if (! labelName.isEmpty()){
+                    newStatement = token.isEndOfStatement();
 
-				SQLCommand label = new SQLCommand(labelName);
-				label.pos = context.labelStart + 1;
-				label.end = context.pos - 1;
-				
-				model.getLabels().add(label);
-			}
-		}
-		context.pos++;
-		context.posAtLine = 0;
-	}
+                }
+
+            }
+
+        } catch (TokenParserException e) {
+            int start = 0;
+            int end = 0;
+            SQLError error = new SQLError(start, end, "Was not able to parse statements:" + e.getMessage());
+            model.errors.add(error);
+            System.err.println("Error:" + error);
+        }
+        return model;
+    }
+
+    private ParseToken handleStatement(List<SQLStatement> substatements, SQLStatement statement, ParseToken statementToken, Iterator<ParseToken> it) {
+        /* guard closes */
+        if (statement == null) {
+            return statementToken;
+        }
+        if (it == null) {
+            return statementToken;
+        }
+        if (statementToken == null) {
+            return statementToken;
+        }
+        /* end of statements are ignored at all */
+        if (statementToken.isEndOfStatement()) {
+            return statementToken;
+        }
+        /* otherwise... */
+        statement.pos = statementToken.getStart();
+        statement.end = statementToken.getEnd();
+        substatements.add(statement);
+
+        if (!it.hasNext()) {
+            return statementToken;
+        }
+        ParseToken scanned = statementToken;
+        StringBuilder intermediateSb = new StringBuilder();
+        do {
+            scanned = it.next();
+            if (scanned.isEndOfStatement()) {
+                break;
+            }
+            if (scanned.isComment()) {
+                break;
+            }
+            if(scanned.isBracketStart()) { // e.g. '(test1234',')' or '(','test1234',')'
+                while( it.hasNext() && ! scanned.isBracketEnd()) {
+                    scanned=it.next();
+                }
+                if (scanned.isBracketEnd()) {
+                    break;
+                }
+            }
+            if (scanned.isCandidateForSubStatement()) {
+                SQLStatement newParent = new SQLStatement(scanned.getText(),statement);
+                scanned = handleStatement(statement.getSubStatements(), newParent, scanned, it);
+            }else {
+                if(statementToken.isSelect()) {
+                    if (scanned.isWhere()) {
+                        break;
+                    }
+                    if (scanned.isFrom()) {
+                        if (intermediateSb.length()>MAXIMUM_SELECT_PROJECTION_SIZE_SHOWN) {
+                            intermediateSb=new StringBuilder();
+                            intermediateSb.append(" {..}");
+                        }
+                    }
+                }
+                intermediateSb.append(" ");
+                intermediateSb.append(scanned.getText());
+                
+            }
+            
+        } while (it.hasNext() && !scanned.isEndOfStatement());
+
+        statement.appendToName(intermediateSb);
+        
+        return scanned;
+    }
 
 }

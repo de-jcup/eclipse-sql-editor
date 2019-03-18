@@ -13,15 +13,21 @@
  * and limitations under the License.
  *
  */
- package de.jcup.sqleditor.outline;
+ package de.jcup.sqleditor.script.parser;
 
-public enum ItemType {
+enum ParserState{
+	INIT,
+	INSIDE_COMMENT,
 	
-	STATEMENT, 
+	INSIDE_SINGLE_STRING,
+	INSIDE_DOUBLE_STRING,
+	INSIDE_DOUBLE_TICKED,
 	
-	META_INFO, 
+	CODE,
+	FUNCTION, 
 	
-	META_ERROR,
+	VARIABLE,
+
+	UNKNOWN,
 	
-	META_DEBUG
 }

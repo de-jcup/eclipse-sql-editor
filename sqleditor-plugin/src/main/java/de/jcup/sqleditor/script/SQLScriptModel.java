@@ -5,18 +5,25 @@ import java.util.List;
 
 public class SQLScriptModel {
 
-	private List<SQLCommand> labels;
+	List<SQLStatement> statements;
+	List<SQLError> errors = new ArrayList<SQLError>();
 	
 	public SQLScriptModel() {
-		labels=new ArrayList<>();
+		statements=new ArrayList<>();
 	}
 	
-	public List<SQLCommand> getLabels() {
-		return labels;
+	public List<SQLStatement> getSQLStatements() {
+		return statements;
 	}
 
-	public boolean hasErrors() {
-		return false;
-	}
+	public boolean hasErrors(){
+        return !getErrors().isEmpty();
+    }
+	
+	public List<SQLError> getErrors() {
+        return errors;
+    }
+
+    
 
 }
