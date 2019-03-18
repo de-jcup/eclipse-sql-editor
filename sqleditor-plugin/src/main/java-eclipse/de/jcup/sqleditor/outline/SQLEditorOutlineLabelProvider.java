@@ -28,6 +28,9 @@ import de.jcup.eclipse.commons.ui.EclipseUtil;
 import de.jcup.sqleditor.ColorManager;
 import de.jcup.sqleditor.SQLEditorActivator;
 import de.jcup.sqleditor.SQLEditorColorConstants;
+import de.jcup.sqleditor.document.keywords.SQLSchemaKeywords;
+import de.jcup.sqleditor.document.keywords.SQLStatementKeywords;
+import de.jcup.sqleditor.document.keywords.SQLStatementTargetKeyWords;
 
 public class SQLEditorOutlineLabelProvider extends BaseLabelProvider implements IStyledLabelProvider, IColorProvider {
 
@@ -94,10 +97,41 @@ public class SQLEditorOutlineLabelProvider extends BaseLabelProvider implements 
 			ItemType itemType = item.getItemType();
 			if (itemType==ItemType.STATEMENT){
 				
-//				StyledString typeString = new StyledString("label ", outlineItemTypeStyler);
-//				styled.append(typeString);
-			    StyledString typeString = new StyledString(item.getOffset()+": "+item.getEndOffset()+"-", outlineItemTypeStyler);
-                styled.append(typeString);
+			    
+			    String[] names= item.getName().split(" ");
+			    for (String part : names) {
+			        boolean keyword=false;
+			        for (SQLStatementKeywords k: SQLStatementKeywords.values()){
+			            if (part.equalsIgnoreCase(k.getText())){
+			                keyword=true;
+			                break;
+			            }
+			        }
+			        if (!keyword) {
+			            for (SQLStatementTargetKeyWords k: SQLStatementTargetKeyWords.values()){
+	                        if (part.equalsIgnoreCase(k.getText())){
+	                            keyword=true;
+	                            break;
+	                        }
+	                    }
+			        }
+			        if (!keyword) {
+			            for (SQLSchemaKeywords k: SQLSchemaKeywords.values()){
+			                if (part.equalsIgnoreCase(k.getText())){
+			                    keyword=true;
+			                    break;
+			                }
+			            }
+			        }
+			        if (keyword) {
+			            StyledString typeString = new StyledString(part, outlineItemTypeStyler);
+			            styled.append(typeString);
+			        }else {
+			            styled.append(part);
+			        }
+			        styled.append(' ');
+			    }
+                return styled;
 			}else if (itemType==ItemType.META_DEBUG){
 				StyledString typeString = new StyledString(item.getOffset()+": ", outlineItemTypeStyler);
 				styled.append(typeString);
