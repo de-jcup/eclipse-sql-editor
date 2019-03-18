@@ -2,19 +2,18 @@
 <feature
       id="de.jcup.sqleditor"
       label="SQL Editor"
-      version="0.1.0"
+      version="0.2.0"
       provider-name="Albert Tregnaghi">
 
    <description url="https://marketplace.eclipse.org/content/sql-editor">
-      SQL Editor is a eclipse plugin to edit sql scripts (.bat)
-
+      SQL Editor is a eclipse plugin to edit sql scripts (*.sql)
 You can find more information at
 https://marketplace.eclipse.org/content/sql-editor
 and
 https://github.com/de-jcup/eclipse-sql-editor
-
 It supports 
-- Syntax coloring which is customizeable and has additional defaults for dark theme
+- Syntax coloring which is customizeable and has additional defaults
+for dark theme
 - Bracket switching + highlighting
 - Block commenting (CTRL+7)
 - Auto bracket closing for []
