@@ -67,6 +67,9 @@ import de.jcup.sqleditor.outline.SQLEditorTreeContentProvider;
 import de.jcup.sqleditor.outline.SQLQuickOutlineDialog;
 import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 import de.jcup.sqleditor.script.SQLStatement;
+import de.jcup.sqleditor.script.formatter.SQLFormatConfig;
+import de.jcup.sqleditor.script.formatter.SQLFormatException;
+import de.jcup.sqleditor.script.formatter.TokenBasedSQLFormatter;
 import de.jcup.sqleditor.script.SQLScriptModel;
 import de.jcup.sqleditor.script.SQLScriptModelBuilder;
 
@@ -81,6 +84,7 @@ public class SQLEditor extends TextEditor implements StatusMessageSupport, IReso
     public static final String EDITOR_RULER_CONTEXT_MENU_ID = EDITOR_CONTEXT_MENU_ID + ".ruler";
 
     private SQLBracketsSupport bracketMatcher = new SQLBracketsSupport();
+    private TokenBasedSQLFormatter sqlFormatter = new TokenBasedSQLFormatter();
     private SourceViewerDecorationSupport additionalSourceViewerSupport;
     private SQLEditorContentOutlinePage outlinePage;
     private SQLScriptModelBuilder modelBuilder;
@@ -286,7 +290,7 @@ public class SQLEditor extends TextEditor implements StatusMessageSupport, IReso
     private String bgColor;
     private String fgColor;
     private boolean ignoreNextCaretMove;
-
+   
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getAdapter(Class<T> adapter) {
@@ -645,5 +649,16 @@ public class SQLEditor extends TextEditor implements StatusMessageSupport, IReso
             outlinePage.onEditorCaretMoved(event.caretOffset);
         }
 
+    }
+
+    public void formatSourceCode() {
+        String formattedSQL;
+        try {
+            formattedSQL = sqlFormatter.format(getDocument().get(),SQLFormatConfig.DEFAULT);
+            getDocument().set(formattedSQL);;
+        } catch (SQLFormatException e) {
+            EclipseUtil.logError("Was not able to format sql source",e, SQLEditorActivator.getDefault());
+        }
+        
     }
 }

@@ -25,4 +25,19 @@ public interface SQLKeyword extends DocumentKeyWord{
     public default boolean isCommaPostFixAllowed() {
         return false;
     }
+    public static boolean isIdentifiedBy(String text, SQLKeyword ... keywords) {
+        if (text==null) {
+            return false;
+        }
+        if (keywords==null || keywords.length==0) {
+            return false;
+        }
+        String textUpper = text.toUpperCase();
+        for (SQLKeyword keyword : keywords) {
+            if (textUpper.equalsIgnoreCase(keyword.getText())){
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -21,14 +21,14 @@ import java.util.List;
 
 import de.jcup.eclipse.commons.keyword.DocumentKeyWord;
 
-public class DocumentKeyWords {
-	private static final DocumentKeyWord[] ALL_KEYWORDS = createAllKeywords();
+public class SQLKeyWords {
+	private static final SQLKeyword[] ALL_KEYWORDS = createAllKeywords();
 	
-	public static DocumentKeyWord[] getAll(){
+	public static SQLKeyword[] getAll(){
 		return ALL_KEYWORDS;
 	}
 	
-	private static DocumentKeyWord[] createAllKeywords() {
+	private static SQLKeyword[] createAllKeywords() {
 		List<DocumentKeyWord> list = new ArrayList<>();
 		list.addAll(Arrays.asList(SQLDataTypesKeywords.values()));
 		list.addAll(Arrays.asList(SQLStatementKeywords.values()));
@@ -37,6 +37,7 @@ public class DocumentKeyWords {
 		list.addAll(Arrays.asList(SQLSchemaKeywords.values()));
 		list.addAll(Arrays.asList(SQLFunctionKeywords.values()));
 		
-		return list.toArray(new DocumentKeyWord[list.size()]);
+		return list.toArray(new SQLKeyword[list.size()]);
 	}
+	 
 }

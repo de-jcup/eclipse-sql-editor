@@ -35,7 +35,7 @@ import de.jcup.eclipse.commons.keyword.DocumentKeyWord;
 import de.jcup.eclipse.commons.keyword.TooltipTextSupport;
 import de.jcup.eclipse.commons.ui.EclipseUtil;
 import de.jcup.eclipse.commons.ui.ReducedBrowserInformationControl;
-import de.jcup.sqleditor.document.keywords.DocumentKeyWords;
+import de.jcup.sqleditor.document.keywords.SQLKeyWords;
 import de.jcup.sqleditor.preferences.SQLEditorPreferenceConstants;
 import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 import de.jcup.sqleditor.preferences.SQLEditorSyntaxColorPreferenceConstants;
@@ -99,7 +99,7 @@ public class SQLTextHover implements ITextHover, ITextHoverExtension {
 			return "";
 		}
 
-		for (DocumentKeyWord keyword : DocumentKeyWords.getAll()) {
+		for (DocumentKeyWord keyword : SQLKeyWords.getAll()) {
 			if (word.equalsIgnoreCase(keyword.getText())) {
 				return buildHoverInfo(keyword);
 			}

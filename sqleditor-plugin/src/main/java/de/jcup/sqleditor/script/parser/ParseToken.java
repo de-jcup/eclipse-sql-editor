@@ -211,6 +211,14 @@ public class ParseToken {
     public boolean isBracketEnd() {
         return getSafeText().endsWith(")");
     }
+
+    public boolean isAs() {
+        return getSafeUppercasedText().equals("AS");
+    }
+    
+    public boolean isNot() {
+        return getSafeUppercasedText().equals("NOT");
+    }
 	
 
 	

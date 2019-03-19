@@ -93,6 +93,12 @@
             categoryId="sqleditor.commands.category"
             id="sqleditor.editor.commands.gotomatchingbracket">
       </command>
+      <command
+            name="Format SQL"
+            description="Will format SQL inside editor"
+            categoryId="sqleditor.commands.category"
+            id="sqleditor.editor.commands.formatsource">
+      </command>
 	</extension>
 	<extension point="org.eclipse.ui.handlers">
 	 <handler
@@ -103,9 +109,13 @@
             commandId="sqleditor.editor.commands.source.toggleComment"
             class="de.jcup.sqleditor.handlers.ToggleCommentHandler">
       </handler>
-       <handler
+      <handler
             commandId="sqleditor.editor.commands.gotomatchingbracket"
             class="de.jcup.sqleditor.handlers.GotoMatchingBracketHandler">
+      </handler>
+      <handler
+            commandId="sqleditor.editor.commands.formatsource"
+            class="de.jcup.sqleditor.handlers.FormatSQLHandler">
       </handler>
     </extension> 
     
@@ -126,6 +136,12 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">	  
 		</key>
 		<key
+            sequence="M1+SHIFT+F"
+            contextId="org.sqleditor.editors.SQLEditor.context"
+            commandId="sqleditor.editor.commands.formatsource"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">	  
+		</key>
+		<key
             sequence="M1+M2+P"
             contextId="org.sqleditor.editors.SQLEditor.context"
             commandId="sqleditor.editor.commands.gotomatchingbracket"
@@ -139,10 +155,24 @@
     <extension point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="popup:org.sqleditor.editors.SQLEditor.context?after=additions">
-         <command
-               commandId="sqleditor.editor.commands.quickoutline"
-               >
+         <command commandId="sqleditor.editor.commands.quickoutline" >
          </command>
+         <menu
+               id="sqleditor.editor.contextmenu.sourceMenu"
+               label="Source"
+               mnemonic="S"
+               >
+               <visibleWhen checkEnabled="true">
+                     <with variable="activeEditor">
+                        <instanceof
+                            value="de.jcup.sqleditor.SQLEditor"/>
+                     </with>
+               </visibleWhen>
+            <command commandId="sqleditor.editor.commands.source.toggleComment">
+            </command>
+            <command commandId="sqleditor.editor.commands.formatsource">
+            </command>
+         </menu>
       </menuContribution>
       
       <menuContribution
@@ -160,6 +190,8 @@
                      </with>
                </visibleWhen>
             <command commandId="sqleditor.editor.commands.source.toggleComment">
+            </command>
+            <command commandId="sqleditor.editor.commands.formatsource">
             </command>
          </menu>
       </menuContribution>

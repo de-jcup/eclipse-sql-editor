@@ -88,7 +88,7 @@ public class AssertParseTokens {
 	public AssertParseTokens containsTokens(String ...tokens){
 		List<String> found = new ArrayList<String>();
 		for (ParseToken token: parseTokens){
-			found.add(token.getUppercasedText());
+			found.add(token.getText());
 		} 
 		if (tokens.length != found.size()){
 			fail("Tokens length differ!\nexpected tokens:\n"+Arrays.asList(tokens)+"\nfound tokens:\n"+found);
