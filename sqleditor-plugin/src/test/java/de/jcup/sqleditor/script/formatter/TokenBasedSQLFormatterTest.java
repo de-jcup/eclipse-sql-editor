@@ -17,6 +17,32 @@ public class TokenBasedSQLFormatterTest {
     }
     
     @Test
+    public void select_subselect_is_indented() throws Exception{
+        /* prepare*/
+        String expected = "DELETE FROM MYSCHEMA.DBP_FIRSTNAMEINDEX\n" + 
+                "where \n" + 
+                "   FIRS_USERS_ID in (\n" + 
+                "                     select USER_ID from MYSCHEMA.DBP_USER\n" + 
+                "                     where \n" + 
+                "                         USER_UID_UPPER= 'albert.tregnaghi'\n" + 
+                "                    )";
+        
+        String original= "DELETE FROM MYSCHEMA.DBP_FIRSTNAMEINDEX "+ 
+                "where " + 
+                "   FIRS_USERS_ID in (" + 
+                "select USER_ID from MYSCHEMA.DBP_USER " + 
+                "where " + 
+                "USER_UID_UPPER= 'albert.tregnaghi'" + 
+                ")";
+        
+        /* execute*/
+        String formatted = formatterToTest.format(original, SQLFormatConfig.DEFAULT);
+        
+        /* test*/
+        assertEquals(expected, formatted);
+    }
+    
+    @Test
     public void select_star_from_xyz() throws Exception{
         /* prepare*/
         String expected = "select * from table1";
