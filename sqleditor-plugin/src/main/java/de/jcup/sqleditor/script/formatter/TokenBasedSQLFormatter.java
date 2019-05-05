@@ -35,12 +35,18 @@ public class TokenBasedSQLFormatter {
 
     }
 
-    protected String createSQL(List<ParseToken> tokens, SQLFormatConfig config) {
+    protected String createSQL(List<ParseToken> tokens, SQLFormatConfig config) throws SQLFormatException{
         Context context = new Context();
         context.config = config;
 
-        for (ParseToken token : tokens) {
+        context.tokenRunner = new ParseTokenRunner(tokens);
+        do {
+            if (! context.tokenRunner.hasToken()) {
+                break;
+            }
+            ParseToken token = context.tokenRunner.getToken();
             if (!context.visitNextToken(token)) {
+                context.tokenRunner.forward();
                 continue;
             }
 
@@ -50,7 +56,9 @@ public class TokenBasedSQLFormatter {
                 handleNoKeyword(context);
             }
             appendSpaceIfNotWhitespaceAtEnd(context);
-        }
+            context.tokenRunner.forward();
+            
+        }while(true);
         return context.sb.toString().trim();
     }
 
@@ -144,7 +152,25 @@ public class TokenBasedSQLFormatter {
     }
     // @formatter:on
 
-    private void handleNoKeyword(Context context) {
+    private void handleNoKeyword(Context context) throws SQLFormatException {
+        BlockData blockData = tryToFindBracketBlock(context);
+        if (blockData.isBlockFound()) {
+            /* a block does always start with a ( and ends with ) - so to prevent
+             * stack overflow /endless loop we must NOT parse the first ( and last
+             * )!*/
+            
+            int indent = context.config.getIndent();
+            context.sb.append("\n").append(getIndentString(indent)).append("(\n");;
+            
+            TokenBasedSQLFormatter f2 = new TokenBasedSQLFormatter();
+            String appendMe = f2.format(blockData.getBlockContent(),context.config);
+            String[] lines = appendMe.split("\n");
+            for (String line: lines) {
+                context.sb.append(getIndentString(indent+2)).append(line).append("\n");
+            }
+            context.sb.append(getIndentString(indent)).append(")\n");
+            return;
+        }
         String text = context.text;
         if (text.startsWith("--")) {
             /* comment special! */
@@ -175,6 +201,77 @@ public class TokenBasedSQLFormatter {
             }
         }
 
+    }
+    
+    private class BlockData{
+
+        public String block;
+        public boolean isBlockFound() {
+            return block!=null && block.startsWith("(") && block.endsWith(")");
+        }
+        
+        /**
+         * @return block but without leading ( and trailing ) 
+         */
+        public String getBlockContent() {
+            if (!isBlockFound()) {
+                return "";
+            }
+            return block.substring(1,block.length()-2);
+        }
+        
+    }
+    
+    private BlockData tryToFindBracketBlock(Context context){
+        BlockData result = new BlockData();
+        int tokenNumberBefore = context.tokenRunner.getTokenNumber();
+        int countOpening = 0;
+        int countClosing = 0;
+        boolean firstStart=true;
+        StringBuilder sb = new StringBuilder();
+        while((firstStart || countOpening!=countClosing) && context.tokenRunner.hasToken()){
+            ParseToken token = context.tokenRunner.getToken();
+            firstStart=false;
+            String text = token.getText();
+            if(text.contentEquals("(")) {
+                sb.append("( ");
+                countOpening++;
+            }else if (text.startsWith("(")) {
+                countOpening++;
+                sb.append("( ");
+                sb.append(text.substring(1));
+                sb.append(" ");
+            }else if (text.contentEquals(")")) {
+                sb.append(") ");
+                countClosing++;
+            }else if (text.endsWith(")")) {
+                sb.append(text.substring(0,text.length()-2));
+                sb.append(" ) ");
+                countClosing++;
+            }else {
+                sb.append(token.getText());
+                sb.append(" ");
+            }
+            if (context.tokenRunner.canForward()) {
+                context.tokenRunner.forward();
+            }else {
+                break;
+            }
+            
+        }
+
+        String block = sb.toString().trim();
+        if (block.startsWith("(")) {
+            if (countOpening!=countClosing) {
+                /* hm strange - normally this is an error!*/
+                return result;
+            }
+            result.block=block;
+        }
+        if (! result.isBlockFound()) {
+            context.tokenRunner.gotoTokenNumber(tokenNumberBefore);
+        }
+        return result;
     }
 
     private void handleCreateBlock(Context context) {
@@ -259,6 +356,11 @@ public class TokenBasedSQLFormatter {
             }
         }
         int indent =context.config.getIndent();
+        String spaces = getIndentString(indent);
+        return spaces;
+    }
+
+    private String getIndentString(int indent) {
         String spaces = indentMap.get(indent);
         if (spaces == null) {
             StringBuilder sb = new StringBuilder();
@@ -272,6 +374,7 @@ public class TokenBasedSQLFormatter {
     }
 
     private class Context {
+        public ParseTokenRunner tokenRunner;
         public boolean createBlockInside;
         private boolean selectBlockActive;
         private boolean whereBlockNextStatementIndentActive;

@@ -19,14 +19,6 @@ public class TokenBasedSQLFormatterTest {
     @Test
     public void select_subselect_is_indented() throws Exception{
         /* prepare*/
-        String expected = "DELETE FROM MYSCHEMA.DBP_FIRSTNAMEINDEX\n" + 
-                "where \n" + 
-                "   FIRS_USERS_ID in (\n" + 
-                "                     select USER_ID from MYSCHEMA.DBP_USER\n" + 
-                "                     where \n" + 
-                "                         USER_UID_UPPER= 'albert.tregnaghi'\n" + 
-                "                    )";
-        
         String original= "DELETE FROM MYSCHEMA.DBP_FIRSTNAMEINDEX "+ 
                 "where " + 
                 "   FIRS_USERS_ID in (" + 
@@ -34,6 +26,16 @@ public class TokenBasedSQLFormatterTest {
                 "where " + 
                 "USER_UID_UPPER= 'albert.tregnaghi'" + 
                 ")";
+
+        String expected = 
+                "DELETE FROM MYSCHEMA.DBP_FIRSTNAMEINDEX\n" + 
+                "where \n" + 
+                "   FIRS_USERS_ID in (\n" + 
+                "                     select USER_ID from MYSCHEMA.DBP_USER\n" + 
+                "                     where \n" + 
+                "                         USER_UID_UPPER= 'albert.tregnaghi'\n" + 
+                "                    )";
+        
         
         /* execute*/
         String formatted = formatterToTest.format(original, SQLFormatConfig.DEFAULT);
@@ -248,7 +250,10 @@ public class TokenBasedSQLFormatterTest {
         // @formatter:off
         /* prepare*/
         String sql      = "select firstname,lastname,phone,email from table1 where rownum<=(select count(*)/2 from emp); ";
-        String expected = "select firstname,lastname,phone,email from table1;";
+        String expected = "select firstname,lastname,phone,email from table1\n"+
+                          "  where rownum <= (\n"+
+                          "    select count(*)/2 from emp\n"+
+                          "  );";
         // @formatter:on
         
         /* execute*/
