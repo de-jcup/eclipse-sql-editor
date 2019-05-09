@@ -37,7 +37,7 @@ public class TokenParser {
 		context.chars = sql.toCharArray();
 		try {
 			for (; context.hasValidPos(); context.moveForward()) {
-
+			    
 				if (isCommentStateHandled(context)) {
 					continue;
 				}
@@ -129,7 +129,7 @@ public class TokenParser {
 			return true;
 		}
 
-		if (c == '{' || c == '}') {
+		if (c == '(' || c == ')') {
 			// block start/ end found, add as own token
 			context.addTokenAndResetText();
 			context.appendCharToText();
@@ -137,6 +137,14 @@ public class TokenParser {
 			context.switchTo(CODE);
 			return true;
 		}
+		if (c == ',' ) {
+            // comma separator, add as own token
+            context.addTokenAndResetText();
+            context.appendCharToText();
+            context.addTokenAndResetText();
+            context.switchTo(CODE);
+            return true;
+        }
 
 		if (c == '-' ) {
 		    if (context.inState(INSIDE_COMMENT)) {
@@ -166,12 +174,12 @@ public class TokenParser {
 		return false;
 	}
 
-	private boolean isStringChar(char c) {
-		boolean isStringChar = c == '\"';
-		isStringChar = isStringChar || c == '\'';
-		isStringChar = isStringChar || c == '`';
-		return isStringChar;
-	}
+//	private boolean isStringChar(char c) {
+//		boolean isStringChar = c == '\"';
+//		isStringChar = isStringChar || c == '\'';
+//		isStringChar = isStringChar || c == '`';
+//		return isStringChar;
+//	}
 
 	private boolean handleString(ParserState stringState, ParseContext context, ParserState... otherStringStates) {
 		for (ParserState otherStringState : otherStringStates) {
@@ -203,58 +211,58 @@ public class TokenParser {
 
 	}
 
-	/**
-	 * Situation: <br>
-	 * 
-	 * <pre>
-	 * $('hello' a'x')
-	     ^------  
-	 * 012345678
-	 * </pre>
-	 * 
-	 * Cursor is at a position after "$(". means index:2.<br>
-	 * <br>
-	 * 
-	 * The method will now check if this is a string start, if so the complete
-	 * content of string will be fetched and appended and pos changed. In the
-	 * example above the postion will be 8 after execution and string of context
-	 * will be <code>"$('hello'"</code>.
-	 * 
-	 */
-	void moveUntilNextCharWillBeNoStringContent(ParseContext context) {
-		context.appendCharToText();
+//	/**
+//	 * Situation: <br>
+//	 * 
+//	 * <pre>
+//	 * $('hello' a'x')
+//	     ^------  
+//	 * 012345678
+//	 * </pre>
+//	 * 
+//	 * Cursor is at a position after "$(". means index:2.<br>
+//	 * <br>
+//	 * 
+//	 * The method will now check if this is a string start, if so the complete
+//	 * content of string will be fetched and appended and pos changed. In the
+//	 * example above the postion will be 8 after execution and string of context
+//	 * will be <code>"$('hello'"</code>.
+//	 * 
+//	 */
+//	void moveUntilNextCharWillBeNoStringContent(ParseContext context) {
+//		context.appendCharToText();
+//
+//		char c = context.getCharAtPos();
+//		if (!isStringChar(c)) {
+//			/*
+//			 * no string - do nothing, pos increment/move forward is done
+//			 * outside in for next loop!
+//			 */
+//			return;
+//		}
+//		if (context.isCharBeforeEscapeSign()) {
+//			return;
+//		}
+//		char stringCharToScan = c;
+//		moveToNextCharNotInStringAndAppendMovements(context, stringCharToScan);
+//
+//	}
 
-		char c = context.getCharAtPos();
-		if (!isStringChar(c)) {
-			/*
-			 * no string - do nothing, pos increment/move forward is done
-			 * outside in for next loop!
-			 */
-			return;
-		}
-		if (context.isCharBeforeEscapeSign()) {
-			return;
-		}
-		char stringCharToScan = c;
-		moveToNextCharNotInStringAndAppendMovements(context, stringCharToScan);
-
-	}
-
-	private void moveToNextCharNotInStringAndAppendMovements(ParseContext context, char stringCharToScan) {
-		if (!context.canMoveForward()) {
-			return;
-		}
-		context.moveForward();
-		context.appendCharToText();
-
-		char c = context.getCharAtPos();
-		if (c == stringCharToScan) {
-			if (!context.isCharBeforeEscapeSign()) {
-				/* found ending of string - so simply return */
-				return;
-			}
-		}
-		moveToNextCharNotInStringAndAppendMovements(context, stringCharToScan);
-	}
+//	private void moveToNextCharNotInStringAndAppendMovements(ParseContext context, char stringCharToScan) {
+//		if (!context.canMoveForward()) {
+//			return;
+//		}
+//		context.moveForward();
+//		context.appendCharToText();
+//
+//		char c = context.getCharAtPos();
+//		if (c == stringCharToScan) {
+//			if (!context.isCharBeforeEscapeSign()) {
+//				/* found ending of string - so simply return */
+//				return;
+//			}
+//		}
+//		moveToNextCharNotInStringAndAppendMovements(context, stringCharToScan);
+//	}
 
 }

@@ -1,4 +1,4 @@
-package de.jcup.sqleditor.script.formatter;
+package de.jcup.sqleditor.script.formatter.token;
 
 import java.util.List;
 

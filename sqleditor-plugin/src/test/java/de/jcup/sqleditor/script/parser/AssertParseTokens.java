@@ -91,10 +91,20 @@ public class AssertParseTokens {
 			found.add(token.getText());
 		} 
 		if (tokens.length != found.size()){
-			fail("Tokens length differ!\nexpected tokens:\n"+Arrays.asList(tokens)+"\nfound tokens:\n"+found);
+			fail("Tokens length differ("+tokens.length+"/"+found.size()+")!\nexpected tokens:\n"+Arrays.asList(tokens)+"\nfound tokens:\n"+found);
 		}
-		if (! Arrays.equals(tokens, found.toArray())){
-			fail("Tokens content differ!\nexpected tokens:\n"+Arrays.asList(tokens)+"\nfound tokens:\n"+found);
+		String[] foundArray = found.toArray(new String[found.size()]);
+        if (! Arrays.equals(tokens, foundArray)){
+		    String firstDiff = "";
+		    int i=0;
+		    for (String token: tokens) {
+		        if (! token.contentEquals(foundArray[i])) {
+		            firstDiff = "Token:"+i+" not found. Expected '"+token+"' but found '"+foundArray[i]+"'";
+		            break;
+		        }
+		        i++;
+		    }
+			fail("Tokens content differ!\n"+firstDiff+"\n\nExpected tokens:\n"+Arrays.asList(tokens)+"\nfound tokens:\n"+found);
 		}
 		return this;
 	}

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import de.jcup.sqleditor.script.formatter.token.ParseTokenRunner;
 import de.jcup.sqleditor.script.parser.ParseToken;
 import de.jcup.sqleditor.script.parser.TestParseToken;
 

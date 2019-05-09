@@ -69,7 +69,7 @@ import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 import de.jcup.sqleditor.script.SQLStatement;
 import de.jcup.sqleditor.script.formatter.SQLFormatConfig;
 import de.jcup.sqleditor.script.formatter.SQLFormatException;
-import de.jcup.sqleditor.script.formatter.TokenBasedSQLFormatter;
+import de.jcup.sqleditor.script.formatter.token.TokenBasedSQLFormatter;
 import de.jcup.sqleditor.script.SQLScriptModel;
 import de.jcup.sqleditor.script.SQLScriptModelBuilder;
 

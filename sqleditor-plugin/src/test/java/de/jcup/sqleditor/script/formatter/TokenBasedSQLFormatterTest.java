@@ -2,10 +2,13 @@ package de.jcup.sqleditor.script.formatter;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import de.jcup.sqleditor.script.formatter.TokenBasedSQLFormatter;
+import de.jcup.sqleditor.TestScriptLoader;
+import de.jcup.sqleditor.script.formatter.token.TokenBasedSQLFormatter;
 
 public class TokenBasedSQLFormatterTest {
 
@@ -16,6 +19,53 @@ public class TokenBasedSQLFormatterTest {
         formatterToTest=new TokenBasedSQLFormatter();
     }
     
+    @Test
+    public void comments_are_handled_check_by_testfiles() throws Exception{
+        /* prepare*/
+        String original= read("origin/test1.sql");
+        
+        String expected = read("result/test1.sql");
+             
+        
+        
+        /* execute*/
+        String formatted = formatterToTest.format(original, SQLFormatConfig.DEFAULT);
+        
+        /* test*/
+        assertEquals(expected, formatted);
+    }
+    
+    private String read(String path) throws IOException {
+       return TestScriptLoader.loadScriptFromTestScripts("formatter/"+path);
+    }
+    
+    @Test
+    public void comments_are_handled() throws Exception{
+        /* prepare*/
+        String original= "CREATE TABLE adm_project\n" + 
+                "(\n" + 
+                "   project_name varchar(60) not null, -- we accept 60 (3x20)\n" + 
+                "   project_description varchar(512), -- description fields always 512 chars\n" + 
+                "   version integer,\n" + 
+                "   PRIMARY KEY (project_name)\n" + 
+                ");";
+        
+        String expected = 
+               "CREATE TABLE adm_project\n" + 
+               "(\n" + 
+               "   project_name varchar(60) not null, -- we accept 60 (3x20)\n" + 
+               "   project_description varchar(512), -- description fields always 512 chars\n" + 
+               "   version integer,\n" + 
+               "   PRIMARY KEY (project_name)\n" + 
+               ");";
+        
+        
+        /* execute*/
+        String formatted = formatterToTest.format(original, SQLFormatConfig.DEFAULT);
+        
+        /* test*/
+        assertEquals(expected, formatted);
+    }
     @Test
     public void select_subselect_is_indented() throws Exception{
         /* prepare*/
@@ -28,13 +78,16 @@ public class TokenBasedSQLFormatterTest {
                 ")";
 
         String expected = 
-                "DELETE FROM MYSCHEMA.DBP_FIRSTNAMEINDEX\n" + 
-                "where \n" + 
-                "   FIRS_USERS_ID in (\n" + 
-                "                     select USER_ID from MYSCHEMA.DBP_USER\n" + 
-                "                     where \n" + 
-                "                         USER_UID_UPPER= 'albert.tregnaghi'\n" + 
-                "                    )";
+               "DELETE FROM MYSCHEMA.DBP_FIRSTNAMEINDEX\n" + 
+               "where\n" + 
+               "FIRS_USERS_ID in\n" + 
+               "(\n" + 
+               "   select\n" + 
+               "      USER_ID\n" + 
+               "   from MYSCHEMA.DBP_USER\n" + 
+               "   where\n" + 
+               "   USER_UID_UPPER= 'albert.tregnaghi'\n" + 
+               ")";
         
         
         /* execute*/
@@ -98,7 +151,8 @@ public class TokenBasedSQLFormatterTest {
                         + "   lastname,\n"
                         + "   phone,\n"
                         + "   email\n"
-                        + "from table1";
+                        + "from\n"
+                        + "   table1";
         // @formatter:on
         
         /* execute*/
@@ -250,10 +304,12 @@ public class TokenBasedSQLFormatterTest {
         // @formatter:off
         /* prepare*/
         String sql      = "select firstname,lastname,phone,email from table1 where rownum<=(select count(*)/2 from emp); ";
-        String expected = "select firstname,lastname,phone,email from table1\n"+
-                          "  where rownum <= (\n"+
-                          "    select count(*)/2 from emp\n"+
-                          "  );";
+        String expected = "select firstname,lastname,phone,email from table1\n" + 
+                "where\n" + 
+                "rownum<=\n" + 
+                "(\n" + 
+                "   select count (*) /2 from emp\n" + 
+                ");";
         // @formatter:on
         
         /* execute*/
