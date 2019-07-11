@@ -10,6 +10,11 @@ AND ticket_custom.value LIKE '%c%' AND type='New material' AND milestone='1.1.12
 GROUP BY ticket.id, ticket_custom.name;
 -- simple inner join
 
+/* 
+ * --------------------------- 
+ * This is a multiline comment
+ * --------------------------- 
+ */
 select uc.username, ud.street, ud.telephone from userdata ud
 inner join usercore uc. on ud.data_id=uc.data_ref ;
 -- a delete containing a sub select

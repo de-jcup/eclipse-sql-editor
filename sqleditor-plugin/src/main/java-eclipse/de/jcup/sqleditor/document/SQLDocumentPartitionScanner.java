@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
@@ -60,6 +61,7 @@ public class SQLDocumentPartitionScanner extends RuleBasedPartitionScanner {
 		List<IPredicateRule> rules = new ArrayList<>();
 //		rules.add(new SQLVariableRule(variables));
 		rules.add(new SingleLineRule("--", "", comment, (char) -1, true));
+		rules.add(new MultiLineRule("/*", "*/", comment));
 		rules.add(new SQLStringRule("\"", "\"", doubleString));
 		rules.add(new SQLStringRule("'", "'", singleString));
 
