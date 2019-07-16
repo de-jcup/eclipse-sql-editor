@@ -26,6 +26,8 @@ public enum SQLStatementTargetKeyWords implements SQLKeyword {
     INDEX,
     
     CONSTRAINT,
+    
+    PROCEDURE,
 
     
     ;
