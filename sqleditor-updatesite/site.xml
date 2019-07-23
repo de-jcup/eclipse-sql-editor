@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/de.jcup.sqleditor_0.1.0.jar" id="de.jcup.sqleditor" version="0.1.0"/>
-   <feature url="features/de.jcup.sqleditor_0.2.0.jar" id="de.jcup.sqleditor" version="0.2.0"/>
+   <feature url="features/de.jcup.sqleditor_1.0.0.jar" id="de.jcup.sqleditor" version="1.0.0">
+      <category name="de.jcup.sqleditor.stable"/>
+   </feature>
+   <category-def name="de.jcup.sqleditor.stable" label="Stable"/>
 </site>
