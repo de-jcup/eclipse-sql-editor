@@ -138,7 +138,7 @@ public class SQLTextHover implements ITextHover, ITextHoverExtension {
 				/* it's already a HTML variant - so just keep as is*/
 				sb.append(tooltip);
 			}else{
-				/* plain text */
+				/* plain tokenText */
 				sb.append("<pre class='preWrapEnabled'>");
 				sb.append(tooltip);
 				sb.append("</pre>");

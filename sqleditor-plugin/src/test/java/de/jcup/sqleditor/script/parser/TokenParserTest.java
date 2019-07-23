@@ -32,6 +32,24 @@ public class TokenParserTest {
         parserToTest = new TokenParser();
     }
     @Test
+    public void comments_found_have_complete_comment_string() throws Exception {
+        String code = "a varchar(1), -- we accept 60 (3x20)\n" + 
+                "   b varchar(2), -- description fields always 512 chars";
+        /* execute */
+        List<ParseToken> result = parserToTest.parse(code);
+        
+        /* test */
+        assertEquals(14, result.size());
+        ParseToken found = result.get(6);
+        assertEquals("-- we accept 60 (3x20)",found.getText());
+        assertTrue(found.isComment());
+        
+        ParseToken found2 = result.get(13);
+        assertEquals("-- description fields always 512 chars",found2.getText());
+        assertTrue(found2.isComment());
+    }
+    
+    @Test
     public void a_comment_has_only_its_text_as_text() throws Exception {
         /* @formatter:off*/
         List<ParseToken> result = parserToTest.parse("a -- bla1\nb -- bla bla");

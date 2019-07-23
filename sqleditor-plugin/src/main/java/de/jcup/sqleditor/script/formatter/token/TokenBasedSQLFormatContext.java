@@ -14,8 +14,9 @@ class TokenBasedSQLFormatContext {
     StringBuilder sb = new StringBuilder();
     boolean selectProjectionBlockHandled;
     boolean createBlock;
-    String text;
+    String tokenText;
     private ParseToken nextLastToken;
+    ParseToken token;
     ParseToken lastToken;
     private int indent;
 
@@ -44,18 +45,19 @@ class TokenBasedSQLFormatContext {
 
     public boolean visitNextToken(ParseToken token) {
         this.lastToken = nextLastToken;
+        this.token=token;
         this.nextLastToken = token;
-        String text = token.getText();
-        if (text == null) {
+        String tokenText = token.getText();
+        if (tokenText == null) {
             return false;
         }
-        this.text = text;
-        if (SQLKeyword.isIdentifiedBy(text, SQLStatementKeywords.CREATE)) {
+        this.tokenText = tokenText;
+        if (SQLKeyword.isIdentifiedBy(tokenText, SQLStatementKeywords.CREATE)) {
             createBlock = true;
         }
-        if (SQLKeyword.isIdentifiedBy(text, SQLStatementKeywords.SELECT)) {
+        if (SQLKeyword.isIdentifiedBy(tokenText, SQLStatementKeywords.SELECT)) {
             enterSelectBlock();
-        } else if (SQLKeyword.isIdentifiedBy(text, SQLStatementKeywords.FROM)) {
+        } else if (SQLKeyword.isIdentifiedBy(tokenText, SQLStatementKeywords.FROM)) {
             leaveSelectBlockByFrom();
         }
         return true;
@@ -71,6 +73,11 @@ class TokenBasedSQLFormatContext {
         selectBlockActive = false;
         selectProjectionBlockHandled = false;
         indentLeft();
+    }
+    
+    @Override
+    public String toString() {
+        return sb.toString();
     }
 
 }

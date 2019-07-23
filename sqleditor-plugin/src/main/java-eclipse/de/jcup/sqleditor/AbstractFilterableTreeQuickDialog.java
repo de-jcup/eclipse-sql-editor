@@ -123,7 +123,7 @@ public abstract class AbstractFilterableTreeQuickDialog<T> extends AbstractQuick
 	 * 
 	 * 
 	 * @param filterText
-	 *            the filter as text or <code>null</code> if not filtered
+	 *            the filter as tokenText or <code>null</code> if not filtered
 	 * @param selected
 	 *            selected
 	 */
@@ -340,7 +340,7 @@ public abstract class AbstractFilterableTreeQuickDialog<T> extends AbstractQuick
 			if (filterText != null) {
 				if (filterText.equals(currentUsedFilterText)) {
 					/*
-					 * same text, occurs when only cursor keys used etc. avoid
+					 * same tokenText, occurs when only cursor keys used etc. avoid
 					 * flickering
 					 */
 					return;

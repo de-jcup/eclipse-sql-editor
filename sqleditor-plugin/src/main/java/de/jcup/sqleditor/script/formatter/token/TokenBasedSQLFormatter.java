@@ -18,6 +18,7 @@ import de.jcup.sqleditor.script.parser.TokenParserException;
 public class TokenBasedSQLFormatter {
 
     private static final int INFINITE_LOOP_PREVENTION = 400_000;
+    private SQLKeyword lastKeywordBefore;
     private JustTrimRightEachLineFormatter justTrimRightFormatter = new JustTrimRightEachLineFormatter();
 
     public String format(String sql) throws SQLFormatException {
@@ -57,13 +58,22 @@ public class TokenBasedSQLFormatter {
             ParseToken token = context.tokenRunner.getToken();
             if (!context.visitNextToken(token)) {
                 context.tokenRunner.forward();
-                continue;
-            }
-
-            if (SQLKeyword.isIdentifiedBy(context.text, SQLKeyWords.getAll())) {
-                handleKeyword(context);
             } else {
-                handleNoKeyword(context);
+                String tokenText = context.tokenText;
+                if (context.token.isComment()) {//context.tokenText.startsWith("--")) {
+                    /* comment special! */
+                    context.sb.append(getIndent(context));
+                    context.sb.append(tokenText);
+                    context.sb.append("\n");
+                } else {
+                    SQLKeyword[] allKeywords = SQLKeyWords.getAll();
+                    if (SQLKeyword.isIdentifiedBy(tokenText, allKeywords)) {
+                        handleKeyword(context);
+                        lastKeywordBefore=SQLKeyword.fetchKeywordOrNull(tokenText,allKeywords);
+                    } else {
+                        handleNoKeyword(context);
+                    }
+                }
             }
             appendSpaceIfNotWhitespaceAtEnd(context);
             context.tokenRunner.forward();
@@ -111,22 +121,39 @@ public class TokenBasedSQLFormatter {
     }
 
     private void handleKeyword(TokenBasedSQLFormatContext context) {
-        String text = context.text;
+        String text = context.tokenText;
         String keyword = text;
         boolean keywordAddded = false;
 
         if (context.config.isTransformingKeywordsToUpperCase()) {
             keyword = text.toUpperCase();
         }
+        
+        if (lastKeywordBefore==SQLStatementKeywords.END || lastKeywordBefore==SQLStatementKeywords.CASE) {
+            appendNewLineAndReplaceLastwhitespacesIfAtEnd(context);
+        }
+        if (SQLKeyword.isIdentifiedBy(text, SQLStatementKeywords.WHEN,SQLStatementKeywords.THEN)) {
+            context.sb.append(calculateIndentString(3));
+        }
 
         if (SQLKeyword.isIdentifiedBy(text, SQLStatementKeywords.AS)) {
-
             /* destroy last newline if there is one */
-            appendSpaceAndReplaceLastwhitespacesIfAtEnd(context);
+            if (lastKeywordBefore==SQLStatementKeywords.END) {
+                appendNewLineAndReplaceLastwhitespacesIfAtEnd(context);
+            }else {
+                appendSpaceAndReplaceLastwhitespacesIfAtEnd(context);
+            }
             context.sb.append(text);
             return;
         }
-
+        
+        if (SQLKeyword.isIdentifiedBy(text, SQLStatementKeywords.values())){
+            if (lastKeywordBefore==SQLStatementKeywords.AS) {
+                /* we add a new line in this case - means we got something like CREATE PROCEDURE ... AS SELECT ...*/
+                appendNewLineAndReplaceLastwhitespacesIfAtEnd(context);
+            }
+        }
+        
         // @formatter:off
         if (SQLKeyword.isIdentifiedBy(text, new SQLKeyword[] { 
                 SQLWhereBlockKeyWords.ORDER, 
@@ -168,26 +195,30 @@ public class TokenBasedSQLFormatter {
     // @formatter:on
 
     private void handleNoKeyword(TokenBasedSQLFormatContext context) throws SQLFormatException {
+        if (lastKeywordBefore==SQLStatementKeywords.WHEN || lastKeywordBefore==SQLStatementKeywords.THEN) {
+            appendSpaceAndReplaceLastwhitespacesIfAtEnd(context);
+        }else if (lastKeywordBefore==SQLStatementKeywords.ELSE) {
+            appendNewLineAndReplaceLastwhitespacesIfAtEnd(context);
+        }
         if (!context.createBlockInside) {
             BlockResult result = tryToFindBracketBlock(context);
             if (result.isBlockFound()) {
                 if (result.hasOnlyOneElement()) {
-                    context.sb.append("(").append(result.getBlockContent()).append(")");
+                    String blockContent = result.getBlockContent();
+                    context.sb.append("(").append(blockContent).append(")");
                 } else {
                     appendFoundBlockByAnotherFormatter(context, result);
                 }
                 return;
             }
         }
-        String text = context.text;
-        if (text.startsWith("--")) {
-            /* comment special! */
-            appendNewLineAndReplaceLastwhitespacesIfAtEnd(context);
-            context.sb.append(getIndent(context));
+        
+        String text = context.tokenText;
+        if (text.startsWith("<") || text.startsWith(">") || text.startsWith("=") || text.startsWith("!")){
             context.sb.append(text);
-            context.sb.append("\n");
             return;
         }
+       
         if (text.equals(",")) {
             handleCommaSeperator(context);
         } else if (text.equals(";")) {
@@ -213,6 +244,11 @@ public class TokenBasedSQLFormatter {
 
     private void handleCommaSeperator(TokenBasedSQLFormatContext context) {
         StringBuilder sb = context.sb;
+        if (context.selectBlockActive && ! context.selectProjectionBlockHandled) {
+            if (!context.config.isBreakingSelectProjection()) {
+                return;
+            }
+        }
         // replace " " by "\n" because we got a space at the end..
         sb.replace(sb.length() - 1, sb.length(), ",\n");
         
@@ -259,7 +295,8 @@ public class TokenBasedSQLFormatter {
             if (!isBlockFound()) {
                 return "";
             }
-            return block.substring(1, block.length() - 2);
+            String content = block.substring(1, block.length() - 1);
+            return content;
         }
 
     }
@@ -273,7 +310,8 @@ public class TokenBasedSQLFormatter {
         int amountOfTokensInBlock = 0;
         StringBuilder sb = new StringBuilder();
         boolean takeNextToken = false;
-        while ((firstStart || countOpening != countClosing) && context.tokenRunner.hasToken()) {
+        
+        while (isScanning(context, countOpening, countClosing, firstStart)) {
             if (takeNextToken) {
                 if (context.tokenRunner.canForward()) {
                     context.tokenRunner.forward();
@@ -290,12 +328,27 @@ public class TokenBasedSQLFormatter {
                 sb.append("(");
                 countOpening++;
             } else if (text.contentEquals(")")) {
-                sb.append(")");
+                boolean done=false;
+                if (sb.length()>0) {
+                    char charAt = sb.charAt(sb.length()-1);
+                    /* we remove the space before ) */
+                    if (charAt==' ') {
+                        sb.replace(sb.length()-1, sb.length()-1,")");
+                        done=true;
+                    }
+                }
+                if (!done) {
+                    sb.append(")");
+                }
                 countClosing++;
             } else {
                 amountOfTokensInBlock++;
                 sb.append(token.getText());
-                sb.append(" ");
+                if (token.isComment()) {
+                    sb.append("\n");
+                }else {
+                    sb.append(" ");
+                }
             }
 
         }
@@ -304,7 +357,8 @@ public class TokenBasedSQLFormatter {
         if (block.startsWith("(")) {
             if (countOpening != countClosing) {
                 /* hm strange - normally this is an error! */
-                return result;
+//                return result;
+                System.err.println("strange: count opening differs count closing!"+isScanning(context, countOpening, countClosing, firstStart));
             }
             result.block = block;
         }
@@ -314,8 +368,16 @@ public class TokenBasedSQLFormatter {
         return result;
     }
 
+    private boolean isScanning(TokenBasedSQLFormatContext context, int countOpening, int countClosing, boolean firstStart) {
+        boolean isScanning = false;
+        isScanning = isScanning || firstStart;
+        isScanning = isScanning ||  countOpening != countClosing;
+        isScanning = isScanning && context.tokenRunner.hasToken();
+        return isScanning;
+    }
+
     private void handleCreateBlock(TokenBasedSQLFormatContext context) {
-        String text = context.text;
+        String text = context.tokenText;
         if (text.equals("(")) {
             appendNewLineAndReplaceLastwhitespacesIfAtEnd(context);
             context.sb.append("(\n");
@@ -346,7 +408,7 @@ public class TokenBasedSQLFormatter {
     }
 
     private void handleNoKeywordButSelectProjectionBlock(TokenBasedSQLFormatContext context) {
-        String text = context.text;
+        String text = context.tokenText;
         StringBuilder sb = context.sb;
         if (!context.config.isBreakingSelectProjection()) {
             sb.append(text);
@@ -383,7 +445,7 @@ public class TokenBasedSQLFormatter {
         String indent = getIndentLastToken(context);
         sb.append("\n");
         sb.append(indent);
-        sb.append(context.text);
+        sb.append(context.tokenText);
         context.indentLeft();
         context.statementIndentActive = false;
     }

@@ -30,15 +30,29 @@ public class TestScriptLoader {
 			testScriptRootFolder = new File("./../sqleditor-other/testscripts");
 		}
 	}
-	
 	public static List<String> fetchAllTestScriptNames() {
-		assertTestscriptFolderExists();
+	    return fetchAllTestScriptNames(null);
+	}
+	public static List<String> fetchAllTestScriptNames(String path) {
+		File folder = assertTestScriptFolder(path);
+		if (!folder.exists()) {
+		    throw new IllegalStateException("Testcase corrupt, folder does not exist:"+folder);
+		}
 		List<String> list = new ArrayList<>();
-		for (File file: testScriptRootFolder.listFiles()){
+		for (File file: folder.listFiles()){
 			list.add(file.getName());
 		}
 		return list;
 	}
+	
+    public static File assertTestScriptFolder(String path) {
+        assertTestscriptFolderExists();
+		File folder = testScriptRootFolder;
+		if (path!=null) {
+		    folder = new File(testScriptRootFolder,path);
+		}
+        return folder;
+    }
 	
 	public static String loadScriptFromTestScripts(String testScriptName) throws IOException{
 		assertTestscriptFolderExists();
@@ -49,10 +63,16 @@ public class TestScriptLoader {
 		}
 		StringBuilder sb = new StringBuilder();
 		try(BufferedReader br = new BufferedReader(new FileReader(file))){
+		    boolean firstLine=true;
 			String line = null;
 			while ((line=br.readLine())!=null){
+			    if (!firstLine) {
+                    sb.append("\n");
+                }
 				sb.append(line);
-				sb.append("\n");
+				if (firstLine) {
+				    firstLine=false;
+				}
 			}
 		}
 		return sb.toString();

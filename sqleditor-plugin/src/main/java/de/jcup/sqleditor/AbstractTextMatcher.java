@@ -40,7 +40,7 @@ public abstract class AbstractTextMatcher<T> implements FilterPatternMatcher<T> 
 		try {
 			itemText = createItemText(item);
 		} catch (ClassCastException e) {
-			/* text matcher is not able to handle this so let it be null */
+			/* tokenText matcher is not able to handle this so let it be null */
 			itemText = null;
 		}
 		return matchesString(itemText);

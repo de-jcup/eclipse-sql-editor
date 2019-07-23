@@ -63,7 +63,7 @@ public class AssertParseTokens {
 	}
 	
 	/**
-	 * Ensures there exists at least one token with given text. The first token will be returned
+	 * Ensures there exists at least one token with given tokenText. The first token will be returned
 	 * @param token
 	 * @return token, never <code>null</code>
 	 */

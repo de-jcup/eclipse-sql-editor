@@ -2,7 +2,7 @@
 <feature
       id="de.jcup.sqleditor"
       label="SQL Editor"
-      version="0.2.0"
+      version="1.0.0"
       provider-name="Albert Tregnaghi">
 
    <description url="https://marketplace.eclipse.org/content/sql-editor">

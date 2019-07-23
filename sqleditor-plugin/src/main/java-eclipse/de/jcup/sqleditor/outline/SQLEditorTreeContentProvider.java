@@ -28,7 +28,7 @@ public class SQLEditorTreeContentProvider implements ITreeContentProvider {
 
 	private static final Object[] EMPTY_ARRAY = new Object[] {};
     private static final String SQL_SCRIPT_CONTAINS_ERRORS = "SQL script contains errors.";
-	private static final String SQL_SCRIPT_DOES_NOT_CONTAIN_ANY_STATEMENTS = "SQL script does not contain any statements";
+	private static final String SQL_SCRIPT_DOES_NOT_CONTAIN_ANY_STATEMENTS = "SQL script does not contain any elements";
 	private static final Object[] RESULT_WHEN_EMPTY = new Object[] { SQL_SCRIPT_DOES_NOT_CONTAIN_ANY_STATEMENTS };
 	private Object[] items;
 	private Object monitor = new Object();

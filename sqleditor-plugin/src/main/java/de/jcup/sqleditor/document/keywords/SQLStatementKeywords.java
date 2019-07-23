@@ -112,6 +112,8 @@ public enum SQLStatementKeywords implements SQLKeyword {
     
     CASE,
     
+    END, // added, necessary e.g for CASE
+    
     NOT,
     
     

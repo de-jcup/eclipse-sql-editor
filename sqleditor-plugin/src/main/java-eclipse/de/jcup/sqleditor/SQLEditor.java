@@ -218,7 +218,7 @@ public class SQLEditor extends TextEditor implements StatusMessageSupport, IReso
 
     /**
      * Installs an additional source viewer support which uses editor preferences
-     * instead of standard text preferences. If standard source viewer support would
+     * instead of standard tokenText preferences. If standard source viewer support would
      * be set with editor preferences all standard preferences would be lost or had
      * to be reimplmented. To avoid this another source viewer support is
      * installed...
@@ -335,7 +335,7 @@ public class SQLEditor extends TextEditor implements StatusMessageSupport, IReso
     }
 
     /**
-     * Get document text - safe way.
+     * Get document tokenText - safe way.
      * 
      * @return string, never <code>null</code>
      */

@@ -94,7 +94,7 @@
             id="sqleditor.editor.commands.gotomatchingbracket">
       </command>
       <command
-            name="Format SQL"
+            name="Format SQL (experimental)"
             description="Will format SQL inside editor"
             categoryId="sqleditor.commands.category"
             id="sqleditor.editor.commands.formatsource">

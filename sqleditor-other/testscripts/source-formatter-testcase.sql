@@ -1,6 +1,6 @@
 -- *******************************
 -- * Example SQL snippet to test *
--- * SELECT highlighting         *
+-- * formatter                   *
 -- *******************************
 SELECT DISTINCT employees AS e FROM EMP_TABLE AS t 
 	WHERE e.employed=1 
@@ -23,3 +23,7 @@ component NOT LIKE 'internal_engine'
 AND 
 ticket.status='qa' AND (ticket.status IN (........))
 GROUP BY ticket.id, ticket_custom.name;
+
+/*
+ * Multi line comments now supported in syntax highlighting... 
+ */

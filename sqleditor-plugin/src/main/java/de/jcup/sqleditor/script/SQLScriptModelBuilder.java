@@ -64,7 +64,7 @@ public class SQLScriptModelBuilder {
         } catch (TokenParserException e) {
             int start = 0;
             int end = 0;
-            SQLError error = new SQLError(start, end, "Was not able to parse statements:" + e.getMessage());
+            SQLError error = new SQLError(start, end, "Was not able to parse elements:" + e.getMessage());
             model.errors.add(error);
             System.err.println("Error:" + error);
         }
@@ -82,7 +82,7 @@ public class SQLScriptModelBuilder {
         if (statementToken == null) {
             return statementToken;
         }
-        /* end of statements are ignored at all */
+        /* end of elements are ignored at all */
         if (statementToken.isEndOfStatement()) {
             return statementToken;
         }

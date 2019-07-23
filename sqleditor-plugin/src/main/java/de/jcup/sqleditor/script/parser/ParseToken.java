@@ -39,7 +39,7 @@ public class ParseToken {
 
 
 	/**
-	 * @return always a upper cased text
+	 * @return always a upper cased tokenText
 	 */
 	public String getUppercasedText() {
 		return uppercasedText;

@@ -112,8 +112,8 @@ public class TokenParser {
 		}
 
 		if (c == ';') {
-			// special sql semicolon operator, separates sql statements .
-		    // interesting for handling multiple statements so we need this information
+			// special sql semicolon operator, separates sql elements .
+		    // interesting for handling multiple elements so we need this information
 			context.addTokenAndResetText();
 			context.switchTo(CODE);
 			context.appendCharToText();
@@ -169,7 +169,7 @@ public class TokenParser {
 			context.addTokenAndResetText();
 			return true;
 		}
-		/* otherwise simply add text */
+		/* otherwise simply add tokenText */
 		context.appendCharToText();
 		return false;
 	}

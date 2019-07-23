@@ -33,7 +33,7 @@ public class PresentationSupport implements IPresentationDamager, IPresentationR
 	/** The document this object works on */
 	protected IDocument fDocument;
 	/**
-	 * The default text attribute if non is returned as data by the current
+	 * The default tokenText attribute if non is returned as data by the current
 	 * token
 	 */
 	protected TextAttribute fDefaultTextAttribute;
@@ -109,10 +109,10 @@ public class PresentationSupport implements IPresentationDamager, IPresentationR
 	}
 
 	/**
-	 * Adds style information to the given text presentation.
+	 * Adds style information to the given tokenText presentation.
 	 *
 	 * @param presentation
-	 *            the text presentation to be extended
+	 *            the tokenText presentation to be extended
 	 * @param offset
 	 *            the offset of the range to be styled
 	 * @param lengthToNameEnd

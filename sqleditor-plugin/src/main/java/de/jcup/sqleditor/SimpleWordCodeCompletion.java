@@ -64,11 +64,11 @@ public class SimpleWordCodeCompletion {
 	}
 
 	/**
-	 * Resolves text before given offset
+	 * Resolves tokenText before given offset
 	 * 
 	 * @param source
 	 * @param offset
-	 * @return text, never <code>null</code>
+	 * @return tokenText, never <code>null</code>
 	 */
 	public String getTextbefore(String source, int offset) {
 		if (source == null || source.isEmpty()) {

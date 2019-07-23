@@ -17,27 +17,32 @@ package de.jcup.sqleditor.document.keywords;
 
 import de.jcup.eclipse.commons.keyword.DocumentKeyWord;
 
-public interface SQLKeyword extends DocumentKeyWord{
+public interface SQLKeyword extends DocumentKeyWord {
 
-    
     public boolean isHavingParameters();
 
     public default boolean isCommaPostFixAllowed() {
         return false;
     }
-    public static boolean isIdentifiedBy(String text, SQLKeyword ... keywords) {
-        if (text==null) {
-            return false;
+
+    public static SQLKeyword fetchKeywordOrNull(String text, SQLKeyword... keywords) {
+        if (text == null) {
+            return null;
         }
-        if (keywords==null || keywords.length==0) {
-            return false;
+        if (keywords == null || keywords.length == 0) {
+            return null;
         }
         String textUpper = text.toUpperCase();
         for (SQLKeyword keyword : keywords) {
-            if (textUpper.equalsIgnoreCase(keyword.getText())){
-                return true;
+            if (textUpper.equalsIgnoreCase(keyword.getText())) {
+                return keyword;
             }
         }
-        return false;
+        return null;
+    }
+
+    public static boolean isIdentifiedBy(String text, SQLKeyword... keywords) {
+        SQLKeyword keyword = fetchKeywordOrNull(text, keywords);
+        return keyword != null;
     }
 }
