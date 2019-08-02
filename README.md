@@ -2,6 +2,7 @@
 
 [![Build status:](https://travis-ci.org/de-jcup/eclipse-sql-editor.svg?branch=master)](https://travis-ci.org/de-jcup/eclipse-sql-editor)
 
+[![Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client](https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png)](http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=4542468 "Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client")
 ## In a nutshell
 A simple eclipse editor for SQL files (*.sql)
 
