@@ -27,7 +27,6 @@ import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
 import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 
-import de.jcup.eclipse.commons.keyword.DocumentKeyWord;
 import de.jcup.sqleditor.document.keywords.SQLDataTypesKeywords;
 import de.jcup.sqleditor.document.keywords.SQLFunctionKeywords;
 import de.jcup.sqleditor.document.keywords.SQLKeyword;
@@ -37,9 +36,6 @@ import de.jcup.sqleditor.document.keywords.SQLStatementTargetKeyWords;
 import de.jcup.sqleditor.document.keywords.SQLWhereBlockKeyWords;
 
 public class SQLDocumentPartitionScanner extends RuleBasedPartitionScanner {
-
-	private OnlyLettersKeyWordDetector onlyLettersWordDetector = new OnlyLettersKeyWordDetector();
-//	private VariableDefKeyWordDetector variableDefKeyWordDetector = new VariableDefKeyWordDetector();
 
 	public int getOffset(){
 		return fOffset;
@@ -59,50 +55,28 @@ public class SQLDocumentPartitionScanner extends RuleBasedPartitionScanner {
 		IToken sqlWhereBlockKeywods = createToken(WHERE_BLOCK_KEYWORD);
 
 		List<IPredicateRule> rules = new ArrayList<>();
-//		rules.add(new SQLVariableRule(variables));
+
 		rules.add(new SingleLineRule("--", "", comment, (char) -1, true));
 		rules.add(new MultiLineRule("/*", "*/", comment));
 		rules.add(new SQLStringRule("\"", "\"", doubleString));
 		rules.add(new SQLStringRule("'", "'", singleString));
 
-//		rules.add(new CommandParameterRule(parameters));
 
-		buildWordRules(rules, sqlStatementKeywords, SQLStatementKeywords.values());
-		buildWordRules(rules, sqlWhereBlockKeywods, SQLWhereBlockKeyWords.values());
-		buildWordRules(rules, sqlSchemaKeywords, SQLSchemaKeywords.values());
+		addStatementsRule(rules, sqlStatementKeywords, SQLStatementKeywords.values());
+		addStatementsRule(rules, sqlWhereBlockKeywods, SQLWhereBlockKeyWords.values());
+		addStatementsRule(rules, sqlSchemaKeywords, SQLSchemaKeywords.values());
 		
-		buildWordRules(rules, dataTypeKeywords, SQLDataTypesKeywords.values());
+		addStatementsRule(rules, dataTypeKeywords, SQLDataTypesKeywords.values());
 		
-		buildWordRules(rules, sqlStatementTargetKeywords, SQLStatementTargetKeyWords.values());
-		buildWordRules(rules, sqlFunctionKeywords, SQLFunctionKeywords.values());
+		addStatementsRule(rules, sqlStatementTargetKeywords, SQLStatementTargetKeyWords.values());
+		addStatementsRule(rules, sqlFunctionKeywords, SQLFunctionKeywords.values());
 
 		setPredicateRules(rules.toArray(new IPredicateRule[rules.size()]));
 	}
 
-	private void buildWordRules(List<IPredicateRule> rules, IToken token, SQLKeyword[] values) {
-		for (SQLKeyword keyWord : values) {
-			ExactWordPatternRule rule1 = new ExactWordPatternRule(onlyLettersWordDetector, createWordStart(keyWord), token,
-					keyWord.isBreakingOnEof());
-
-			ExactWordPatternRule rule2 = new ExactWordPatternRule(onlyLettersWordDetector, keyWord.getText().toUpperCase(), token,
-					keyWord.isBreakingOnEof());
-			if (keyWord.isHavingParameters()) {
-			    /* a silly workaround  - bu works... in schema "varchar(," shall be rendered, ( not highlighted */
-			    rule1.setAllowedPostfix('(');
-			    rule2.setAllowedPostfix('(');
-			}else if (keyWord.isCommaPostFixAllowed()) {
-			    /* a silly workaround  - bu works... in schema "integer," shall be rendered, commata not highlighted */
-			    rule1.setAllowedPostfix(','); 
-                rule2.setAllowedPostfix(',');
-			}
-			rules.add(rule1);
-			rules.add(rule2);
-			
-		}
-	}
-
-	private String createWordStart(DocumentKeyWord keyWord) {
-		return keyWord.getText();
+	private void addStatementsRule(List<IPredicateRule> rules, IToken token, SQLKeyword[] values) {
+	    SQLKeyWordRule rule = new SQLKeyWordRule(token, values);
+	    rules.add(rule);
 	}
 
 	private IToken createToken(SQLDocumentIdentifier identifier) {

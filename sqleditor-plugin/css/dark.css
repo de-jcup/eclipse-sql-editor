@@ -1,0 +1,13 @@
+IEclipsePreferences#de-jcup-sqleditor:de-jcup-sqleditor { /* pseudo attribute added to allow contributions without replacing this node, see Bug 466075 */
+	preferences:
+		'colorNormalText=192,192,192'
+		'colorStatement=0,128,0'
+		'colorFunctions=196,160,0'
+		'colorTargets=77,154,6'
+		'colorSingleQuotes=255,128,64'
+		'colorDoubleQuotes=85,85,255'
+		'colorComments=0,128,128'
+		'colorWhereBlock=0,128,0'
+		'colorDataType=196,160,0'
+}
+

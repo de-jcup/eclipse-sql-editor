@@ -31,6 +31,8 @@ public enum SQLWhereBlockKeyWords implements SQLKeyword{
     
     DESC,
     
+    ROWNUM,
+    
     ;
 
     private String text;

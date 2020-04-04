@@ -29,7 +29,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Shell;
 
 import de.jcup.eclipse.commons.SimpleStringUtils;
-import de.jcup.eclipse.commons.WhitespaceWordEndDetector;
 import de.jcup.eclipse.commons.WordEndDetector;
 import de.jcup.eclipse.commons.keyword.DocumentKeyWord;
 import de.jcup.eclipse.commons.keyword.TooltipTextSupport;
@@ -46,8 +45,18 @@ public class SQLTextHover implements ITextHover, ITextHoverExtension {
 	private String bgColor;
 	private String fgColor;
 	private String commentColorWeb;
-	private WordEndDetector wordEndDetector = new WhitespaceWordEndDetector();
+	private WordEndDetector wordEndDetector = new SQLStatementWordEndDetector();
 
+	private class SQLStatementWordEndDetector implements WordEndDetector{
+
+	    @Override
+	    public boolean isWordEnd(char c) {
+	        return Character.isWhitespace(c) || c=='(' || c==';' || c==',';
+	    }
+
+	}
+
+	
 	@Override
 	public IInformationControlCreator getHoverControlCreator() {
 		if (creator == null) {

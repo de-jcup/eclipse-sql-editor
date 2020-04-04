@@ -94,6 +94,10 @@ public interface SQLEditorColorConstants {
 
     public static final RGB MIDDLE_YELOW = rgb(196,160,0);
 
+    public static final RGB DARK_THEME_MIDDLE_BLUE = /* #347CB5 */ rgb(52,124,181);
+
+    public static final RGB DARK_THEME_CYAN = /*#37ACAF*/ rgb(55,172,175);
+
 
 	public static RGB rgb(int r, int g, int b) {
 		return new RGB(r, g, b);

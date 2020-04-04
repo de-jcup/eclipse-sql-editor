@@ -24,21 +24,27 @@ public enum SQLStatementKeywords implements SQLKeyword {
     
     BLOCK,
     
+    BACKUP,
+    
     COMMENT,
     
     CREATE,
     
     DELETE,
     
+    DECLARE,
+    
     DROP,
     
     EXECUTE,
     
+    EXEC,
+    
     INSERT,
     
-    MERGE,
+    INTO,
     
-    REPLACE,
+    MERGE,
     
     SELECT,
     
@@ -66,7 +72,8 @@ public enum SQLStatementKeywords implements SQLKeyword {
     
     OR,
     
-    JOIN,
+    /* JOINING ...*/    
+    FULL,
     
     INNER,
     
@@ -74,11 +81,17 @@ public enum SQLStatementKeywords implements SQLKeyword {
     
     LEFT,
     
+    RIGHT,
+    
+    JOIN,
+    
+    UNION,
+
     ON,
     
     AS,
     
-    /* transaction aprts*/
+    /* transaction parts */
     COMMIT,
     
     
@@ -115,7 +128,10 @@ public enum SQLStatementKeywords implements SQLKeyword {
     END, // added, necessary e.g for CASE
     
     NOT,
+
+    TOP,
     
+    LIMIT,
     
     LIKE,
     

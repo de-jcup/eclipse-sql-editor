@@ -64,14 +64,13 @@ public class SQLEditorSyntaxColorPreferencePage extends FieldEditorPreferencePag
 				/* editor colors */
 				changeColor(editorMap, COLOR_NORMAL_TEXT, SQLEditorColorConstants.GRAY_JAVA);
 				changeColor(editorMap, COLOR_STATEMENT_KEYWORD, SQLEditorColorConstants.MIDDLE_GREEN);
-				changeColor(editorMap, COLOR_DATA_TYPE_KEYWORD, SQLEditorColorConstants.MIDDLE_YELOW);
-				
+				changeColor(editorMap, COLOR_FUNCTION_KEYWORDS, SQLEditorColorConstants.MIDDLE_YELOW);
+				changeColor(editorMap, COLOR_TARGET_KEYWORD, SQLEditorColorConstants.MIDDLE_GREEN_2);
 				changeColor(editorMap, COLOR_SINGLE_QUOTES, SQLEditorColorConstants.MIDDLE_ORANGE);
 				changeColor(editorMap, COLOR_DOUBLE_QUOTES, SQLEditorColorConstants.BRIGHT_BLUE);
 				changeColor(editorMap, COLOR_COMMENT, SQLEditorColorConstants.MIDDLE_CYAN);
 				changeColor(editorMap, COLOR_WHERE_BLOCK_KEYWORD, SQLEditorColorConstants.MIDDLE_GREEN);
-				changeColor(editorMap, COLOR_TARGET_KEYWORD, SQLEditorColorConstants.MIDDLE_GREEN_2);
-				changeColor(editorMap, COLOR_FUNCTION_KEYWORDS, SQLEditorColorConstants.MIDDLE_GREEN_2);
+				changeColor(editorMap, COLOR_DATA_TYPE_KEYWORD, SQLEditorColorConstants.MIDDLE_YELOW);
 				
 				
 			}

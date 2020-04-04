@@ -21,7 +21,7 @@ package de.jcup.sqleditor.preferences;
 public enum SQLEditorSyntaxColorPreferenceConstants implements PreferenceIdentifiable, PreferenceLabeled{
 	COLOR_NORMAL_TEXT("colorNormalText","Normal tokenText color"),
 	COLOR_STATEMENT_KEYWORD("colorStatement", "Statements"),
-	COLOR_FUNCTION_KEYWORDS("colorFuinctions","Functions"),
+	COLOR_FUNCTION_KEYWORDS("colorFunctions","Functions"),
 	COLOR_TARGET_KEYWORD("colorTargets","Targets"),
 	COLOR_SINGLE_QUOTES("colorSingleQuotes", "Single quotes"),
 	COLOR_DOUBLE_QUOTES("colorDoubleQuotes", "Double quotes"),

@@ -21,6 +21,16 @@ import de.jcup.eclipse.commons.keyword.TooltipTextSupport;
 public enum SQLStatementTargetKeyWords implements SQLKeyword {
     TABLE,
     
+    COLUMN,
+    
+    ALL,
+    
+    ANY,
+    
+    DATABASE,
+    
+    DEFAULT,
+    
     VIEW,
     
     INDEX,
@@ -28,7 +38,6 @@ public enum SQLStatementTargetKeyWords implements SQLKeyword {
     CONSTRAINT,
     
     PROCEDURE,
-
     
     ;
 

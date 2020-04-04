@@ -33,6 +33,8 @@ public enum SQLSchemaKeywords implements SQLKeyword{
     
     UNIQUE,
     
+    CHECK,
+    
     ;
 
     private String text;
