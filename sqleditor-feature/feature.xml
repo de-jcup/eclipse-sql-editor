@@ -2,7 +2,7 @@
 <feature
       id="de.jcup.sqleditor"
       label="SQL Editor"
-      version="1.0.0"
+      version="1.1.0"
       provider-name="Albert Tregnaghi">
 
    <description url="https://marketplace.eclipse.org/content/sql-editor">
@@ -239,7 +239,7 @@ and limitations under the License.
    </license>
 
    <url>
-      <update label="SQL Editor update site" url="https://dl.bintray.com/de-jcup/sqleditor"/>
+      <update label="SQL editor update site" url="https://dl.bintray.com/de-jcup/sqleditor"/>
    </url>
 
    <plugin
