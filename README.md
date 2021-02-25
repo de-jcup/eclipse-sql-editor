@@ -1,6 +1,6 @@
 ![Logo](https://github.com/de-jcup/eclipse-sql-editor/blob/master/sqleditor-plugin/html/images/sql-editor-logo.png?raw=true)
 
-[![Build status:](https://travis-ci.org/de-jcup/eclipse-sql-editor.svg?branch=master)](https://travis-ci.org/de-jcup/eclipse-sql-editor)
+[![Java CI with Gradle](https://github.com/de-jcup/eclipse-sql-editor/actions/workflows/gradle.yml/badge.svg)](https://github.com/de-jcup/eclipse-sql-editor/actions/workflows/gradle.yml)
 
 [![Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client](https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png)](http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=4542468 "Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client")
 ## In a nutshell
