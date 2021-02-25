@@ -1,11 +1,15 @@
-
 repositories {
     mavenCentral()
+    
+    // dirty hack to get de-jcup-commons as dependency here
+    flatDir {
+        dirs './../sqleditor-plugin/lib'
+    }
 }
 
 dependencies {
   
-    testCompile project(':sqleditor-plugin')
+    compile project(':sqleditor-plugin')
 
 }
  

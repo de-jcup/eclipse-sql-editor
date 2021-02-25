@@ -3,8 +3,8 @@ repositories{
     flatDir {
         dirs 'lib'
     }
+}
     
-    dependencies {
-        compile name: 'de-jcup-eclipse-commons'
-    }
+dependencies {
+    compile name: 'de-jcup-eclipse-commons'
 }
