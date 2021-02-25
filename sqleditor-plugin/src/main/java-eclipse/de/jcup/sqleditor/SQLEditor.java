@@ -76,6 +76,9 @@ import de.jcup.sqleditor.script.SQLScriptModelBuilder;
 @AdaptedFromEGradle
 public class SQLEditor extends TextEditor implements StatusMessageSupport, IResourceChangeListener {
 
+    private static final SQLFileDocumentProvider SQL_FILE_DOCUMENT_PROVIDER = new SQLFileDocumentProvider();
+    private static final SQLTextFileDocumentProvider SQL_TEXT_FILE_DOCUMENT_PROVIDER = new SQLTextFileDocumentProvider();
+    
     /** The COMMAND_ID of this editor as defined in plugin.xml */
     public static final String EDITOR_ID = "org.sqleditor.editors.SQLEditor";
     /** The COMMAND_ID of the editor context menu */
@@ -349,7 +352,7 @@ public class SQLEditor extends TextEditor implements StatusMessageSupport, IReso
 
     @Override
     protected void doSetInput(IEditorInput input) throws CoreException {
-        setDocumentProvider(createDocumentProvider(input));
+        setDocumentProvider(resolveSharedDocumentProvider(input));
         super.doSetInput(input);
 
         rebuildOutline();
@@ -439,11 +442,11 @@ public class SQLEditor extends TextEditor implements StatusMessageSupport, IReso
         return isMarkerChangeForThisResource;
     }
 
-    private IDocumentProvider createDocumentProvider(IEditorInput input) {
+    private IDocumentProvider resolveSharedDocumentProvider(IEditorInput input) {
         if (input instanceof FileStoreEditorInput) {
-            return new SQLTextFileDocumentProvider();
+            return SQL_TEXT_FILE_DOCUMENT_PROVIDER;
         } else {
-            return new SQLFileDocumentProvider();
+            return SQL_FILE_DOCUMENT_PROVIDER;
         }
     }
 
