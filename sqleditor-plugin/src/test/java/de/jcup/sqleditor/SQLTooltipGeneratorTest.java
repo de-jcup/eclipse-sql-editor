@@ -36,6 +36,26 @@ public class SQLTooltipGeneratorTest {
     private static final float MININUM_ACCEPTED_PERCENTAGE_FOR_TOOLTIP_DESCRIPTIONS= 80f;
     
     @Test
+    public void testImportantSchemaPartsAreNotEmpty() {
+        SQLTooltipGenerator generator = new SQLTooltipGenerator(new SQLTooltipModel());
+        assertGenerated(SQLStatementKeywords.ALTER, generator);
+        
+        assertGenerated(SQLStatementKeywords.CREATE, generator);
+        assertGenerated(SQLStatementKeywords.ADD, generator);
+        assertGenerated(SQLStatementKeywords.DROP, generator);
+        
+    }
+    
+    private void assertGenerated(SQLKeyword keyword, SQLTooltipGenerator generator) {
+        String result = generator.createDescription(keyword);
+        if (result == null || result.trim().length()==0) {
+            String message = "SQL generator generates nothing for keyword:"+keyword;
+            System.err.println(message);
+            fail(message);
+        }
+    }
+    
+    @Test
     public void smoke_test_with_output_about_missing_descriptions_but_at_least_mini_percent_must_be_described() {
         SQLTooltipGenerator generator = new SQLTooltipGenerator(new SQLTooltipModel());
         List<SQLKeyword> notDescribed= new ArrayList<>();

@@ -43,11 +43,24 @@ public class SQLTooltipModel {
     private Example sqlDeleteExample1 = createDeleteExample1();
     private Example sqlInsertExample1 = createInsertExample1();
     private Example sqlInsertExample2 = createInsertExample2();
+    private Example sqlAlterTableExample1 = createAlterTableExample1();
+    private Example sqlAlterTableExample2 = createAlterTableExample2();
+    private Example sqlCreateTableExample1 = createCreateTableExample1();
+    private Example sqlCreateDatabaseeExample1 = createCreateDatabaseExample1();
 
+    private Example sqlAlterTableAddUniqueConstraintExample1 = createAlterTableAddConstraintUnique();
+    private Example sqlAlterTableDropConstraintExample1 = createAlterTableDropConstraint();
+    private Example sqlAlterTableModifyTypeExample1 = createAlterTableModifyTypeExample1();
+    private Example sqlAlterTableAddForeignKeyConstraintExample1 = createAlterTableAddConstraintForeginKeyExample1();
+    private Example sqlAlterTableAddCheckKeyConstraintExample1 = createAlterTableAddConstraintCheckExample1();
+    private Example sqlCreateSchemaExample1 = createCreateSchemaExample1();
+    
+    
     private void register(Page page) {
         SQLKeyword keyword = page.mainKeyword;
         map.put(keyword, page);
     }
+
 
     /* @formatter:off */
     // Some parts are adopted from https://www.w3resource.com/sql/tutorials.php -
@@ -343,7 +356,7 @@ public class SQLTooltipModel {
                 "\n" + 
                 "Without using any WHERE clause (or without making any restriction) the SQL UPDATE command can change all the records for the specific columns of a table. ",
                 
-                syntax("UPDATE < table name > SET<column1>=<value1>,<column2>=<value2>,.....\n" + 
+                syntax("UPDATE table name SET column1=value1,column2=value2,.....\n" + 
                 "WHERE <condition>;\n"
                 + "<ul>"
                 + "<li>table_name - Name of the table to be updated.</li>"
@@ -363,7 +376,7 @@ public class SQLTooltipModel {
                 "\n" + 
                 "While inserting the values, it is needed to enclose the values with single quotes for character or date values.",
                 
-                syntax("INSERT INTO < table name > (col1,col2,col3...col n)\n" + 
+                syntax("INSERT INTO table_name (col1,col2,col3...col n)\n" + 
                         "VALUES (value1,value2,value3…value n);\n"
                 + "<ul>"
                 + "<li>table_name - Name of the table where data will be inserted.</li>"
@@ -371,7 +384,7 @@ public class SQLTooltipModel {
                 + "<li>value1,value2,value3,value n - Values against each column.</li>"
                 + "</ul>You can also use another syntax to insert data. Here, you don't specify column names of the associated table. So, value1 is inserted into the first column of a table, value2 into column2 and so on.\n" + 
                 "\n" + 
-                "INSERT INTO < table name >\n" + 
+                "INSERT INTO table_name\n" + 
                 "VALUES (value1,value2,value3…value n);"),
                 sqlInsertExample1,sqlInsertExample2);   
         
@@ -385,6 +398,113 @@ public class SQLTooltipModel {
                 + "<li>search_condition - specify a search condition (logical expression) that has one or more conditions.</li>"
                 + "</ul>"),
                 sqlDeleteExample1);   
+        
+        createPageAndRegister(SQLStatementKeywords.ALTER,
+                "The SQL ALTER TABLE command is used to change the structure of an existing table. It helps to add or delete columns, create or destroy indexes, change the type of existing columns, or rename columns or the table itself.\n" + 
+                "\n" + 
+                "It can also be used to change the comment for the table and type of the table.",
+                
+                syntax("ALTER TABLE table_name(\n" + 
+                        "ADD column1    data_type[(size)],\n" + 
+                        "ADD column2    data_type[(size)],\n" + 
+                        "...);\n"
+                + "<ul>"
+                + "<li>table_name - Name of the table where data is stored.</li>"
+                + "<li>column1,column2 - Name of the columns of a table.</li>"
+                + "<li>data_type - Char, varchar, integer, decimal, date and more.</li>"
+                + "<li>size - Maximum length of the column of a table.</li>"
+                + "</ul>"),
+                sqlAlterTableExample1,sqlAlterTableExample2,
+
+                
+                sqlAlterTableModifyTypeExample1,
+
+                sqlAlterTableAddUniqueConstraintExample1, 
+                sqlAlterTableAddForeignKeyConstraintExample1,
+                sqlAlterTableAddCheckKeyConstraintExample1,
+                
+                sqlAlterTableDropConstraintExample1
+                );   
+        
+        createPageAndRegister(SQLStatementKeywords.CREATE,
+               "<h4>Create table</h4>"
+               + "Tables are a basic unit of organization and storage of data in SQL. Each table has a name such as an author, book_mast, purchase or orders. A table is similar to a file in a non-database system.\n" + 
+               "\n" + 
+               "Tables are organized into rows and columns. Each row represents a record, and each column can be thought of as representing a component of that record."
+               + "<h4>Create database</h4>"
+               + "In SQL, the CREATE DATABASE statement is used to create a database though the ANSI standard does not contain a CREATE DATABASE statement. The database names are case sensitive in Unix but this restriction does not apply in Windows. This is also true for table names. The best practice is to use same letter case while creating a database as well as tables.\n" + 
+               "All most all database platform support CREATE DATABASE statement with variations.\n"
+               + "<h4>Create schema</h4>"
+               + "A schema is a logical database object holder. A database schema of a database system is its structure described in a formal language supported by the database management system. The formal definition of a database schema is a set of formulas (sentences) called integrity constraints imposed on a database. These integrity constraints ensure compatibility between parts of the schema. All constraints are expressible in the same language.\n" + 
+               "Creating schemas can be useful when objects have circular references, that is when we need to create two tables each with a foreign key referencing the other table. Different implementations treat schemas in slightly different ways.",
+                
+                syntax("CREATE TABLE table_name(\n" + 
+                        "column1    data_type[(size)],\n" + 
+                        "column2    data_type[(size)],\n" + 
+                        "...);\n"
+                + "<ul>"
+                + "<li>table_name - Name of the table where data is stored.</li>"
+                + "<li>column1,column2 - Name of the columns of a table.</li>"
+                + "<li>data_type - Char, varchar, integer, decimal, date and more.</li>"
+                + "<li>size - Maximum length of the column of a table.</li>"
+                + "</ul>"
+                + "\n\n"
+                + "CREATE DATABASE [database_name];"
+                + "<ul>"
+                + "<li>database_name - Name of the database. The maximum length of the database name depends on upon the vendor of the database.</li>"
+                + "</ul>"
+                + "\n\nCREATE SCHEMA [schema_name] [AUTHORIZATION owner_name]\n" + 
+                "[DEFAULT CHARACTER SET char_set_name]\n" + 
+                "[PATH schema_name[, ...]]\n" + 
+                "[ ANSI CREATE statements [...] ]\n" + 
+                "[ ANSI GRANT statements [...] ];\n"  
+                + "<ul>"
+                + "<li>schema_name - The name of a schema to be created. If this is omitted, the user_name is used as the schema name.</li>"
+                + "<li>AUTHORIZATION owner_name - Identifies the user who is the owner of the schema. If not mentioned the current user is set as the owner.</li>"
+                + "<li>DEFAULT CHARACTER SET char_set_name - Specify the default character set, used for all objects created in the schema.</li>"
+                + "<li>PATH schema_name[, ...] - An optional file path and file name.</li>"
+                + "<li>ANSI CREATE statements [...][, ...] - Contains one or more CREATE statements.</li>"
+                + "<li>ANSI GRANT statements [...] - Contains one or more GRANT statements.</li>"
+                + "</ul>"
+                ),
+                sqlCreateTableExample1,
+                sqlCreateDatabaseeExample1,
+                sqlCreateSchemaExample1
+                
+                );   
+        
+        createPageAndRegister(SQLStatementKeywords.ADD,
+                "<h4>ADD CONSTRAINT</h4> To add constraints ALTER TABLE is used in addition.",
+                
+                syntax("ALTER TABLE table_name \n" +
+                       "ADD CONSTRAINT constraint_name\n"+
+                       "CHECK check_expression|UNIQUE|FOREIGN KEY(new_pk_columname REFERENCES) ref_table_name(ref_table_key_column)\n"
+                + "<ul>"
+                + "<li>table_name - Name of the table where this constraint shall be added</li>"
+                + "<li>constraint_name - the name/identifier for this constraint.</li>"
+                + "<li>check_expression - an expression used for check.</li>"
+                + "<li>new_pk_columname - the name of the column to become the new primary key.</li>"
+                + "<li>ref_table_name - the name of the referenced table</li>"
+                + "<li>ref_table_key_column - the name of the referenced table column</li>"
+                + "</ul>\n\n"
+                + ""),
+                sqlAlterTableAddUniqueConstraintExample1,
+                sqlAlterTableAddForeignKeyConstraintExample1,
+                sqlAlterTableAddCheckKeyConstraintExample1 );   
+        
+        createPageAndRegister(SQLStatementKeywords.DROP,
+                "<h4>DROP CONSTRAINT</h4> To drop constraints ALTER TABLE is used in addition.",
+                
+                syntax("ALTER TABLE <table_name> \n" +
+                       "DROP CONSTRAINT <constraint_name>\n"
+                + "<ul>"
+                + "<li>table_name - Name of the table where this constraint shall be added</li>"
+                + "<li>constraint_name - the name/identifier for this constraint.</li>"
+                + "</ul>\n\n"
+                + ""),
+                sqlAlterTableDropConstraintExample1
+                
+                );   
     }
 
     /*
@@ -556,6 +676,79 @@ public class SQLTooltipModel {
      * ++++++++++++++++++++++++++++++++++++++
      * 
      */
+//    "ALTER TABLE <table_name> ADD CONSTRAINT\n" + 
+//    "<constraint_name> UNIQUE(<column_name>);");
+    private Example createAlterTableAddConstraintUnique() {
+        Example example= new Example("Add a uniqueness constraint to a column",
+                "ALTER TABLE agent1 ADD CONSTRAINT\n" + 
+                "c_no_duplicate_ac UNIQUE(agent_code);");
+        
+        example.description="Adds a uniqueness constraint to column 'agent_code' by altering a table";
+        
+        return example;
+    }
+    
+    private Example createAlterTableDropConstraint() {
+        Example example= new Example("Drop an existing constraint",
+                "ALTER TABLE agent1\n" + 
+                "DROP CONSTRAINT c_no_duplicate_ac;");
+        
+        example.description="Drops the constraint 'c_no_duplicate_ac'";
+        
+        return example;
+    }
+    private Example createAlterTableModifyTypeExample1() {
+        Example example= new Example("Modify a column data type",
+                "ALTER TABLE  agent1\n" + 
+                "MODIFY (country VARCHAR2(35));");
+        
+        example.description="The example changes the data type of column 'country' to a varchar with 255 max size'";
+        
+        return example;
+    }
+    
+    private Example createAlterTableAddConstraintForeginKeyExample1() {
+        Example example= new Example("Add a foreign key constraint",
+                "ALTER TABLE customer1\n" + 
+                "ADD CONSTRAINT \n" + 
+                "fk_ag_code\n" + 
+                "FOREIGN KEY (agent_code)\n" + 
+                "REFERENCES agents(agent_code);"); 
+        
+        example.description="This adds a FOREIGN KEY CONSTRAINT named 'fk_ag_code' for the column 'agent_code' of the 'customer1' table.";
+        
+        return example;
+    }
+    
+    private Example createCreateSchemaExample1() {
+        Example example= new Example("Create a schema and grant access",
+                "CREATE SCHEMA INVENTRY\n" + 
+                "\n" + 
+                "     CREATE TABLE PART (IDNO  SMALLINT NOT NULL,\n" + 
+                "                        SNAME    VARCHAR(40),\n" + 
+                "                        CLASS INTEGER)\n" + 
+                "\n" + 
+                "     GRANT ALL ON PART TO DAVID\n" + 
+                ""); 
+        
+        example.description="Creates a schema that has an student details table. Give authority on the table to user DAVID.";
+        
+        return example;
+    }
+    
+    private Example createAlterTableAddConstraintCheckExample1() {
+        Example example= new Example("Add a check constraint",
+                "ALTER TABLE customer1\n" + 
+                "ADD CONSTRAINT\n" + 
+                "du_che_con\n" + 
+                "CHECK(grade&gt;=1 AND grade&lt;=3);"); 
+        
+        example.description="This adds a FOREIGN KEY CONSTRAINT named 'fk_ag_code' for the column 'agent_code' of the 'customer1' table.";
+        
+        return example;
+    }
+    
+    
     private Example createUnionExample1() {
         Example example= new Example("union",
                 "SELECT c.name, c.address\n" + 
@@ -622,6 +815,44 @@ public class SQLTooltipModel {
         example.description="The example adds values'A001','Jodi','London','075-1248798' for a single row into the table 'agents'";
         return example;
     }
+    
+    
+    private Example createCreateTableExample1() {
+        Example example = new Example("xx","CREATE TABLE mytest(\n" + 
+                "agent_code char(6),\n" + 
+                "agent_name char(40),\n" + 
+                "working_area char(35),\n" + 
+                "commission decimal(10,2),\n" + 
+                "phone_no char(15) NULL);");
+        example.description="The example creates a new table 'mytest' with some columns inside";
+        return example;
+    }
+    
+    private Example createCreateDatabaseExample1() {
+        Example example = new Example("Create database - general","CREATE DATABASE test;");
+        example.description="The example generates a database 'test'. This is the way every DBMS will understand. If there is a need to setup additional parts - e.g. encoding, optimization etc. - the DBMS configuration documentation must be read.";
+        return example;
+    }
+
+    
+    private Example createAlterTableExample1() {
+        Example example= new Example("Alter table ading new column for emails",
+                "ALTER TABLE agent1 ADD email char(25);\n" 
+                ); 
+        
+        example.description="The example adds values'A001','Jodi','London','.12','075-1248798' for a single row into the table 'agents'.";
+        return example;
+    }
+    
+    private Example createAlterTableExample2() {
+        Example example= new Example("Alter table removing an existing column",
+                "ALTER TABLE agent1 DROP(country);" 
+                ); 
+        
+        example.description="The example adds values'A001','Jodi','London','.12','075-1248798' for a single row into the table 'agents'.";
+        return example;
+    }
+    
     private Example createInsertExample2() {
         Example example= new Example("Insert (no column names given)",
                 "INSERT INTO agents\n" + 
