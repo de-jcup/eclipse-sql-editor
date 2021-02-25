@@ -26,6 +26,8 @@ public class SQLTooltipModel {
     private Example sqlUpdateExample1 = createUpdateExample1();
     private Example sqlUpdateExample2 = createUpdateExample2();
     private Example sqlDeleteExample1 = createDeleteExample1();
+    private Example sqlInsertExample1 = createInsertExample1();
+    private Example sqlInsertExample2 = createInsertExample2();
 
     private void register(Page page) {
         SQLKeyword keyword = page.mainKeyword;
@@ -35,7 +37,6 @@ public class SQLTooltipModel {
     /* @formatter:off */
     // Some parts are adopted from https://www.w3resource.com/sql/tutorials.php -
     // License was: "This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License."
-
     public SQLTooltipModel() {
 
         handleStatements();
@@ -337,6 +338,28 @@ public class SQLTooltipModel {
                 + "</ul>"),
                 sqlUpdateExample1,sqlUpdateExample2);   
         
+
+        createPageAndRegister(SQLStatementKeywords.INSERT,
+                "The SQL INSERT statement is used to insert a single record or multiple records into a table.\n" + 
+                "\n" + 
+                "While inserting a row, if the columns are not specified, it means that vales are added for all of the columns of the table resulting addition of a single row. If it is required to insert values for one or more specific column(s), then it is necessary to specify the name(s) of the column(s) in the SQL query.\n" + 
+                "\n" + 
+                "The SQL SELECT statement can also be used to insert the rows of one table into another identical table.\n" + 
+                "\n" + 
+                "While inserting the values, it is needed to enclose the values with single quotes for character or date values.",
+                
+                syntax("INSERT INTO < table name > (col1,col2,col3...col n)\n" + 
+                        "VALUES (value1,value2,value3…value n);\n"
+                + "<ul>"
+                + "<li>table_name - Name of the table where data will be inserted.</li>"
+                + "<li>col1,col2,col3,col n - Column of the table.</li>"
+                + "<li>value1,value2,value3,value n - Values against each column.</li>"
+                + "</ul>You can also use another syntax to insert data. Here, you don't specify column names of the associated table. So, value1 is inserted into the first column of a table, value2 into column2 and so on.\n" + 
+                "\n" + 
+                "INSERT INTO < table name >\n" + 
+                "VALUES (value1,value2,value3…value n);"),
+                sqlInsertExample1,sqlInsertExample2);   
+        
         createPageAndRegister(SQLStatementKeywords.DELETE,
                 "The SQL DELETE command is used to delete rows or records from a table.",
                 
@@ -572,6 +595,28 @@ public class SQLTooltipModel {
         
         return example;
     }
+    
+    
+    private Example createInsertExample1() {
+        Example example= new Example("Insert",
+                "INSERT INTO agents\n" + 
+                " (id,name,location,data)\n"+
+                " VALUES (\"A001\",\"Jodi\",\"London\",\"075-1248798\");"
+                ); 
+        
+        example.description="The example adds values'A001','Jodi','London','075-1248798' for a single row into the table 'agents'";
+        return example;
+    }
+    private Example createInsertExample2() {
+        Example example= new Example("Insert (no column names given)",
+                "INSERT INTO agents\n" + 
+                        "VALUES (\"A001\",\"Jodi\",\"London\",.12,\"075-1248798\");"
+                ); 
+        
+        example.description="The example adds values'A001','Jodi','London','.12','075-1248798' for a single row into the table 'agents'.";
+        return example;
+    }
+    
     private Example createDeleteExample1() {
 
         Example example= new Example("Delete",
