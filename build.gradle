@@ -20,7 +20,7 @@ allprojects{
 		
 }
 
-def doAutomateEclipseSetup = ['sqleditor-other'];
+def doAutomateEclipseSetup = ['sqleditor-other','sqleditor-test'];
 
 subprojects {
     apply plugin: 'java'

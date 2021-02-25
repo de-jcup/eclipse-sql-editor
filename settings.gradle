@@ -1,3 +1,2 @@
 
-include 'sqleditor-plugin',
-'sqleditor-other'		
+include 'sqleditor-plugin', 'sqleditor-test', 'sqleditor-other'		

@@ -15,7 +15,7 @@
  */
 package de.jcup.sqleditor.document.keywords;
 
-import de.jcup.eclipse.commons.keyword.TooltipTextSupport;
+import de.jcup.sqleditor.TooltipCache;
 
 //see https://en.wikibooks.org/wiki/Windows_SQL_Scripting
 public enum SQLStatementKeywords implements SQLKeyword {
@@ -190,7 +190,7 @@ public enum SQLStatementKeywords implements SQLKeyword {
 
     @Override
     public String getTooltip() {
-        return TooltipTextSupport.getTooltipText(name().toLowerCase());
+        return TooltipCache.INSTANCE.getTooltip(this);
     }
 
     @Override

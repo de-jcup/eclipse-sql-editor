@@ -15,7 +15,7 @@
  */
 package de.jcup.sqleditor.document.keywords;
 
-import de.jcup.eclipse.commons.keyword.TooltipTextSupport;
+import de.jcup.sqleditor.TooltipCache;
 
 /*
  * 
@@ -23,7 +23,7 @@ import de.jcup.eclipse.commons.keyword.TooltipTextSupport;
  * Sources: https://www.cs.utexas.edu/~mitra/csFall2015/cs329/lectures/sqlFunc.html, 
  * https://en.wikipedia.org/wiki/SQL_syntax
  */
-public enum SQLFunctionKeywords implements SQLKeyword {
+public enum SQLFunctionKeywords implements SQLKeyword, SimpleTooltipTextHolder {
 
     /* numeric */
     ABS(null, "ABS(m), absoute value of m", null), 
@@ -89,6 +89,8 @@ public enum SQLFunctionKeywords implements SQLKeyword {
     LTRIM(null, "LTRIM ( s [, set ] ), s is a character string and set is a set of characters, Returns s with characters removed up to the first character not in set; defaults to space", null),
     
     RTRIM(null, "RTRIM ( s [, set ] ), s is a character string and set is a set of characters, Returns s with final characters removed after the last character not in set; defaults to space", null),
+
+    TRIM(),
     
     REPLACE(null,
             "REPLACE ( s, search_s [, replace_s ] ), s = character string, search_s = target string, replace_s = replacement string, Returns s with every occurrence of search_s in s replaced by replace_s; default removes search_s",
@@ -152,12 +154,14 @@ public enum SQLFunctionKeywords implements SQLKeyword {
     LEAST(null, "LEAST ( d1, d2, ..., dn ),  d1 ... dn = list of dates,  Earliest of the given dates", null),
 
     /* Date Conversion Functions */
-    TO_DATE(null, "TO_DATE ( s [, fmt ] ), s = character string, fmt = format for date,  String s converted to a date value", null),
+    TO_DATE(null, "TO_DATE ( s [, fmt ] ), s = character string, fmt = format for date,  String s converted to a date value", null), 
+    
+    TRANSLATE,
 
     ;
     private String text;
     private String linkToDocumentation;
-    private String tooltip;
+    private String simpleToolTipText;
 
     SQLFunctionKeywords() {
         this(null, null,null);
@@ -173,7 +177,7 @@ public enum SQLFunctionKeywords implements SQLKeyword {
 
     SQLFunctionKeywords(String text, String tooltip, String linkToDocumentation) {
         this.text = text;
-        this.tooltip = tooltip;
+        this.simpleToolTipText = tooltip;
         this.linkToDocumentation = linkToDocumentation;
     }
 
@@ -200,14 +204,16 @@ public enum SQLFunctionKeywords implements SQLKeyword {
 
     @Override
     public String getTooltip() {
-        if (tooltip != null) {
-            return tooltip;
-        }
-        return TooltipTextSupport.getTooltipText(name().toLowerCase());
+        return TooltipCache.INSTANCE.getTooltip(this);
     }
 
     @Override
     public boolean isHavingParameters() {
         return true;
+    }
+
+    @Override
+    public String getSimpleTooltipText() {
+        return simpleToolTipText;
     }
 }

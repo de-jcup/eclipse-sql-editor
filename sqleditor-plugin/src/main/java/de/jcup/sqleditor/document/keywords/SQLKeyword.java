@@ -24,7 +24,7 @@ public interface SQLKeyword extends DocumentKeyWord {
     public default boolean isCommaPostFixAllowed() {
         return false;
     }
-
+    
     public static SQLKeyword fetchKeywordOrNull(String text, SQLKeyword... keywords) {
         if (text == null) {
             return null;

@@ -1,0 +1,12 @@
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+  
+    testCompile project(':sqleditor-plugin')
+
+}
+ 
+   
