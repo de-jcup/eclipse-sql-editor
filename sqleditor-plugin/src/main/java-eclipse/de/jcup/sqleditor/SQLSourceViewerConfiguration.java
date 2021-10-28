@@ -50,6 +50,7 @@ import org.eclipse.ui.texteditor.MarkerAnnotation;
 
 import de.jcup.sqleditor.document.SQLDocumentIdentifier;
 import de.jcup.sqleditor.document.SQLDocumentIdentifiers;
+import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 import de.jcup.sqleditor.presentation.PresentationSupport;
 import de.jcup.sqleditor.presentation.SQLDefaultTextScanner;
 /**
@@ -173,6 +174,9 @@ public class SQLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 		addPresentation(reconciler, SINGLE_STRING.getId(), getPreferences().getColor(COLOR_SINGLE_QUOTES),SWT.NONE);
 		addPresentation(reconciler, COMMENT.getId(), getPreferences().getColor(COLOR_COMMENT),SWT.NONE);
 		
+		if (SQLEditorPreferences.getInstance().isCustomKeywordSupportEnabled()) {
+		    addPresentation(reconciler, CUSTOM_KEYWORDS.getId(), getPreferences().getColor(COLOR_CUSTOM_KEYWORDS),SWT.NONE);
+		}
 		return reconciler;
 	}
 

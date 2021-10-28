@@ -39,6 +39,8 @@ public enum SQLDocumentIdentifiers implements SQLDocumentIdentifier {
 	
 	DATA_TYPE_KEYWORDS,
 	
+	CUSTOM_KEYWORDS,
+	
 	;
 
 

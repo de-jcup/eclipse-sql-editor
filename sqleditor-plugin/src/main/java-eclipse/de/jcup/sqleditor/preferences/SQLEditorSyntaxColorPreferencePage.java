@@ -71,6 +71,7 @@ public class SQLEditorSyntaxColorPreferencePage extends FieldEditorPreferencePag
 				changeColor(editorMap, COLOR_COMMENT, SQLEditorColorConstants.MIDDLE_CYAN);
 				changeColor(editorMap, COLOR_WHERE_BLOCK_KEYWORD, SQLEditorColorConstants.MIDDLE_GREEN);
 				changeColor(editorMap, COLOR_DATA_TYPE_KEYWORD, SQLEditorColorConstants.MIDDLE_YELOW);
+				changeColor(editorMap, COLOR_CUSTOM_KEYWORDS, SQLEditorColorConstants.MIDDLE_BROWN);
 				
 				
 			}

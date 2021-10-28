@@ -34,6 +34,7 @@ import de.jcup.sqleditor.document.keywords.SQLSchemaKeywords;
 import de.jcup.sqleditor.document.keywords.SQLStatementKeywords;
 import de.jcup.sqleditor.document.keywords.SQLStatementTargetKeyWords;
 import de.jcup.sqleditor.document.keywords.SQLWhereBlockKeyWords;
+import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 
 public class SQLDocumentPartitionScanner extends RuleBasedPartitionScanner {
 
@@ -43,6 +44,7 @@ public class SQLDocumentPartitionScanner extends RuleBasedPartitionScanner {
 	
 	public SQLDocumentPartitionScanner() {
 	    IToken dataTypeKeywords = createToken(DATA_TYPE_KEYWORDS);
+	    IToken customKeywords = createToken(CUSTOM_KEYWORDS);
 		IToken sqlFunctionKeywords = createToken(FUNCTION_KEYWORDS);
 		IToken comment = createToken(COMMENT);
 		IToken singleString = createToken(SINGLE_STRING);
@@ -71,7 +73,10 @@ public class SQLDocumentPartitionScanner extends RuleBasedPartitionScanner {
 		addStatementsRule(rules, sqlStatementTargetKeywords, SQLStatementTargetKeyWords.values());
 		addStatementsRule(rules, sqlFunctionKeywords, SQLFunctionKeywords.values());
 
+		addStatementsRule(rules, customKeywords, SQLEditorPreferences.getInstance().getCustomKeywords());
+
 		setPredicateRules(rules.toArray(new IPredicateRule[rules.size()]));
+		
 	}
 
 	private void addStatementsRule(List<IPredicateRule> rules, IToken token, SQLKeyword[] values) {

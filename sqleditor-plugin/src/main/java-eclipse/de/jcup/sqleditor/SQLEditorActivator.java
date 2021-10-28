@@ -21,51 +21,53 @@ import org.osgi.framework.BundleContext;
 import de.jcup.eclipse.commons.PluginContextProvider;
 import de.jcup.eclipse.commons.keyword.TooltipTextSupport;
 import de.jcup.eclipse.commons.resource.EclipseResourceInputStreamProvider;
+import de.jcup.sqleditor.preferences.SQLEditorConfigurableCustomKeywordsSupportProvider;
+import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class SQLEditorActivator extends AbstractUIPlugin implements PluginContextProvider{
+public class SQLEditorActivator extends AbstractUIPlugin implements PluginContextProvider {
 
-	// The plug-in COMMAND_ID
-	public static final String PLUGIN_ID = "de.jcup.sqleditor"; //$NON-NLS-1$
+    // The plug-in COMMAND_ID
+    public static final String PLUGIN_ID = "de.jcup.sqleditor"; //$NON-NLS-1$
 
-	// The shared instance
-	private static SQLEditorActivator plugin;
-	private ColorManager colorManager;
+    // The shared instance
+    private static SQLEditorActivator plugin;
+    private ColorManager colorManager;
 
+    /**
+     * The constructor
+     */
+    public SQLEditorActivator() {
+        colorManager = new ColorManager();
+        TooltipTextSupport.setTooltipInputStreamProvider(new EclipseResourceInputStreamProvider(PLUGIN_ID));
+    }
 
-	/**
-	 * The constructor
-	 */
-	public SQLEditorActivator() {
-		colorManager = new ColorManager();
-		TooltipTextSupport.setTooltipInputStreamProvider(new EclipseResourceInputStreamProvider(PLUGIN_ID));
-	}
+    public ColorManager getColorManager() {
+        return colorManager;
+    }
 
-	public ColorManager getColorManager() {
-		return colorManager;
-	}
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+        plugin = this;
+        SQLEditorPreferences.register(new SQLEditorConfigurableCustomKeywordsSupportProvider(this));
+    }
 
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-	}
+    public void stop(BundleContext context) throws Exception {
+        plugin = null;
+        colorManager.dispose();
+        super.stop(context);
+    }
 
-	public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		colorManager.dispose();
-		super.stop(context);
-	}
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static SQLEditorActivator getDefault() {
-		return plugin;
-	}
+    /**
+     * Returns the shared instance
+     *
+     * @return the shared instance
+     */
+    public static SQLEditorActivator getDefault() {
+        return plugin;
+    }
 
     @Override
     public AbstractUIPlugin getActivator() {
@@ -76,5 +78,6 @@ public class SQLEditorActivator extends AbstractUIPlugin implements PluginContex
     public String getPluginID() {
         return PLUGIN_ID;
     }
+
 
 }

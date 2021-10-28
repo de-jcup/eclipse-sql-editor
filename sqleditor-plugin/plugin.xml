@@ -13,6 +13,10 @@
    		id="sqleditor.preferences.keyword.color"
    		label="color">
      </keyword>
+      <keyword
+   		id="sqleditor.preferences.keyword.custom"
+   		label="custom">
+     </keyword>
      <keyword
    		id="sqleditor.preferences.keyword.editor"
    		label="editor">
@@ -215,7 +219,7 @@
          </keywordReference>
       </page>
       <page
-         id="sqleditor.eclipse.gradleeditor.preferences.SQLEditorEditorSyntaxColorPreferencePage"
+         id="sqleditor.eclipse.gradleeditor.preferences.SQLEditorSyntaxColorPreferencePage"
          class="de.jcup.sqleditor.preferences.SQLEditorSyntaxColorPreferencePage"
          name="Syntax coloring"
          category="sqleditor.eclipse.gradleeditor.preferences.SQLEditorEditorPreferencePage">
@@ -226,11 +230,26 @@
                id="sqleditor.preferences.keyword.color">
          </keywordReference>
       </page>
+      <page
+         id="de.jcup.sqleditor.preferences.SQLEditorCustomKeywordsPreferencePage"
+         class="de.jcup.sqleditor.preferences.SQLEditorCustomKeywordsPreferencePage"
+         name="Custom keywords"
+         category="sqleditor.eclipse.gradleeditor.preferences.SQLEditorEditorPreferencePage">
+         <keywordReference
+               id="sqleditor.preferences.keyword.SQL">
+         </keywordReference>
+          <keywordReference
+               id="sqleditor.preferences.keyword.custom">
+         </keywordReference>
+      </page>
     </extension>
     <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="de.jcup.sqleditor.preferences.SQLEditorPreferenceInitializer">
+      </initializer>
+        <initializer
+            class="de.jcup.sqleditor.preferences.SQLEditorCustomKeyPreferenceInitializer">
       </initializer>
    </extension>
    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
