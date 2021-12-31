@@ -61,7 +61,7 @@ import de.jcup.sqleditor.presentation.SQLDefaultTextScanner;
 public class SQLSourceViewerConfiguration extends TextSourceViewerConfiguration {
 
 	
-    private SQLDefaultTextScanner gradleScanner;
+    private SQLDefaultTextScanner scanner;
 	private ColorManager colorManager;
 
 	private TextAttribute defaultTextAttribute;
@@ -200,19 +200,19 @@ public class SQLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 	}
 
 	private SQLDefaultTextScanner getGradleDefaultTextScanner() {
-		if (gradleScanner == null) {
-			gradleScanner = new SQLDefaultTextScanner(colorManager);
+		if (scanner == null) {
+			scanner = new SQLDefaultTextScanner(colorManager);
 			updateTextScannerDefaultColorToken();
 		}
-		return gradleScanner;
+		return scanner;
 	}
 
 	public void updateTextScannerDefaultColorToken() {
-		if (gradleScanner == null) {
+		if (scanner == null) {
 			return;
 		}
 		RGB color = getPreferences().getColor(COLOR_NORMAL_TEXT);
-		gradleScanner.setDefaultReturnToken(createColorToken(color));
+		scanner.setDefaultReturnToken(createColorToken(color));
 	}
 	
 

@@ -28,9 +28,11 @@ import de.jcup.eclipse.commons.ui.EclipseUtil;
 import de.jcup.sqleditor.ColorManager;
 import de.jcup.sqleditor.SQLEditorActivator;
 import de.jcup.sqleditor.SQLEditorColorConstants;
+import de.jcup.sqleditor.document.keywords.SQLKeyword;
 import de.jcup.sqleditor.document.keywords.SQLSchemaKeywords;
 import de.jcup.sqleditor.document.keywords.SQLStatementKeywords;
 import de.jcup.sqleditor.document.keywords.SQLStatementTargetKeyWords;
+import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 
 public class SQLEditorOutlineLabelProvider extends BaseLabelProvider implements IStyledLabelProvider, IColorProvider {
 
@@ -123,6 +125,18 @@ public class SQLEditorOutlineLabelProvider extends BaseLabelProvider implements 
 			                }
 			            }
 			        }
+			        if (!keyword) {
+			            if (SQLEditorPreferences.getInstance().isCustomKeywordSupportEnabled()) {
+			                SQLKeyword[] customKeywords = SQLEditorPreferences.getInstance().getCustomKeywords();
+			                for (SQLKeyword k: customKeywords){
+	                            if (part.equalsIgnoreCase(k.getText())){
+	                                keyword=true;
+	                                break;
+	                            }
+	                        }
+			            }
+			        }
+			        
 			        if (keyword) {
 			            StyledString typeString = new StyledString(part, outlineItemTypeStyler);
 			            styled.append(typeString);
