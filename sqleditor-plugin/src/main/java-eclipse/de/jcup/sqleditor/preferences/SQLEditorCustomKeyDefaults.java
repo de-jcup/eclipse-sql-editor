@@ -22,8 +22,16 @@ import java.util.List;
 
 public class SQLEditorCustomKeyDefaults {
 	private static List<SqlEditorCustomKeyDefinition> defaults = new ArrayList<>();
+	
 	static{
-//		defaults.add(new SqlEditorCustomKeyDefinition("exception", "Raise an exc.NORMAL));
+	    /* Microsoft SQL server */
+	    defaults.add(new SqlEditorCustomKeyDefinition("raiseerror", "Raise an exception(SQL server)"));
+	    defaults.add(new SqlEditorCustomKeyDefinition("nowait", "an exception will be sent to client immediately (SQL server)"));
+		
+	    /* Oracle */
+	    defaults.add(new SqlEditorCustomKeyDefinition("raise", "Raise an exception (Oracle)"));
+		defaults.add(new SqlEditorCustomKeyDefinition("exception", "Handle an exception (Oracle)"));
+		defaults.add(new SqlEditorCustomKeyDefinition("elsif", "Raise an exception (Oracle)"));
 	}
 	/**
 	 * @return unmodifiable list of default definitions

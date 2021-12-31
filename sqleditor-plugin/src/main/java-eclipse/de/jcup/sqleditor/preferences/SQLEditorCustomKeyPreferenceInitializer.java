@@ -24,6 +24,8 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 public class SQLEditorCustomKeyPreferenceInitializer extends AbstractPreferenceInitializer {
 
     private ScopedPreferenceStore store;
+    
+    public static boolean DEFAULT_CUSTOM_KEYWORDS_ENABLED=false;
 
     public SQLEditorCustomKeyPreferenceInitializer(String pluginId) {
         store = new ScopedPreferenceStore(InstanceScope.INSTANCE, pluginId);
@@ -37,7 +39,7 @@ public class SQLEditorCustomKeyPreferenceInitializer extends AbstractPreferenceI
 
         String defaultData = converter.convertListTostring(list);
 
-        store.setDefault(SQLEditorCustomKeywordsPreferencePage.PREFERENCE_KEY_CUSTOM_KEYWORDS_ENABLED, true);
+        store.setDefault(SQLEditorCustomKeywordsPreferencePage.PREFERENCE_KEY_CUSTOM_KEYWORDS_ENABLED, DEFAULT_CUSTOM_KEYWORDS_ENABLED);
         store.setDefault(SQLEditorCustomKeywordsPreferencePage.PREFERENCE_KEY_CUSTOM_KEYWORDS_DEFINITIONS, defaultData);
     }
 

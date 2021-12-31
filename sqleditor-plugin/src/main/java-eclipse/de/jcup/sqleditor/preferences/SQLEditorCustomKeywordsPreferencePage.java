@@ -88,8 +88,11 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
 
     @Override
     protected void performDefaults() {
-        this.definitionWorkingCopy = new ArrayList<>(SQLEditorCustomKeyDefaults.get());
-        updateTable();
+        definitionWorkingCopy = new ArrayList<>(SQLEditorCustomKeyDefaults.get());
+        customKeywordsEnabled=SQLEditorCustomKeyPreferenceInitializer.DEFAULT_CUSTOM_KEYWORDS_ENABLED;
+        
+        propertiesTable.setInput(definitionWorkingCopy);
+        btnTodosEnabled.setSelection(this.customKeywordsEnabled);
     }
 
     @Override
@@ -120,7 +123,7 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
     protected void performApply() {
         super.performApply();
     }
-
+    
     @Override
     public void dispose() {
         super.dispose();
@@ -169,9 +172,9 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
     private static final Object[] NO_OBJECTS = new Object[] {};
 
     /**
-     * Content provider for the environment table
+     * Content provider for the custom keyword table
      */
-    protected class TaskTagDefinitionsContentProvider implements IStructuredContentProvider {
+    protected class CustomKeywordDefinitionsContentProvider implements IStructuredContentProvider {
 
         public Object[] getElements(Object inputElement) {
             if (inputElement instanceof List) {
@@ -240,13 +243,15 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
         Composite tableComposite = SWTFactory.createComposite(parent, font, 1, 1, GridData.FILL_BOTH, 0, 0);
         // Create table
         propertiesTable = new TableViewer(tableComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
+        
         Table table = propertiesTable.getTable();
         table.setLayout(new GridLayout());
         table.setLayoutData(new GridData(GridData.FILL_BOTH));
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
         table.setFont(font);
-        propertiesTable.setContentProvider(new TaskTagDefinitionsContentProvider());
+        
+        propertiesTable.setContentProvider(new CustomKeywordDefinitionsContentProvider());
         propertiesTable.setLabelProvider(new TaskTagDefinitionLabelProvider());
         propertiesTable.setColumnProperties(new String[] { P_VARIABLE, P_VALUE });
         propertiesTable.setComparator(new ViewerComparator() {
