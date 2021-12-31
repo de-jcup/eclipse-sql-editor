@@ -79,7 +79,7 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
         this.provider = SQLEditorPreferences.getInstance().getCustomKeywordsProvider();
         
         setPreferenceStore(provider.getPreferenceStore());
-        setDescription("Define Custom SQL keywords");
+        setDescription("Here you can define custom SQL keywords. If you change anything here, you have to reopen editors to see changes.");
         setTitle("Custom SQL keywords");
         
         this.definitionWorkingCopy = new ArrayList<>(provider.getTaskTagDefinitions());
