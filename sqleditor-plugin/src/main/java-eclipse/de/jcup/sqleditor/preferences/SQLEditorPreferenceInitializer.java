@@ -68,6 +68,7 @@ public class SQLEditorPreferenceInitializer extends AbstractPreferenceInitialize
 		preferences.setDefaultColor(COLOR_COMMENT, GREEN_JAVA);
 		
 		preferences.setDefaultColor(COLOR_DATA_TYPE_KEYWORD, TASK_DEFAULT_RED);
+		preferences.setDefaultColor(COLOR_CUSTOM_KEYWORDS, BROWN);
 		preferences.setDefaultColor(COLOR_WHERE_BLOCK_KEYWORD, TASK_DEFAULT_RED);
 		preferences.setDefaultColor(COLOR_TARGET_KEYWORD, DARK_GRAY);
 		preferences.setDefaultColor(COLOR_FUNCTION_KEYWORDS, DARK_BLUE);

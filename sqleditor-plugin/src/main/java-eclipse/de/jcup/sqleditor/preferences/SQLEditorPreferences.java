@@ -32,12 +32,14 @@ import de.jcup.eclipse.commons.ui.EclipseUtil;
 import de.jcup.sqleditor.ColorUtil;
 import de.jcup.sqleditor.SQLEditor;
 import de.jcup.sqleditor.SQLEditorActivator;
+import de.jcup.sqleditor.document.keywords.SQLKeyword;
 
 public class SQLEditorPreferences {
 
 	private static SQLEditorPreferences INSTANCE = new SQLEditorPreferences();
+    private static SQLEditorConfigurableCustomKeywordsSupportProvider customKeywordsProvider;
 	private IPreferenceStore store;
-
+	
 	private SQLEditorPreferences() {
 		store = new ScopedPreferenceStore(InstanceScope.INSTANCE, SQLEditorActivator.PLUGIN_ID);
 		store.addPropertyChangeListener(new IPropertyChangeListener() {
@@ -121,6 +123,10 @@ public class SQLEditorPreferences {
 		getPreferenceStore().setValue(id.getId(), value);
 	}
 
+	public boolean isCustomKeywordSupportEnabled() {
+        return customKeywordsProvider.isCustomSQLeywordSupportEnabled();
+    }
+	
 	public boolean isLinkOutlineWithEditorEnabled() {
 		return getBooleanPreference(P_LINK_OUTLINE_WITH_EDITOR);
 	}
@@ -165,6 +171,18 @@ public class SQLEditorPreferences {
 	public static SQLEditorPreferences getInstance() {
 		return INSTANCE;
 	}
+
+    public SQLKeyword[] getCustomKeywords() {
+        return getCustomKeywordsProvider().getCustomKeywords();
+    }
+
+    public SQLEditorConfigurableCustomKeywordsSupportProvider getCustomKeywordsProvider() {
+        return customKeywordsProvider;
+    }
+
+    public static void register(SQLEditorConfigurableCustomKeywordsSupportProvider customKeywordsProvider) {
+        SQLEditorPreferences.customKeywordsProvider=customKeywordsProvider;
+    }
 
 	
 

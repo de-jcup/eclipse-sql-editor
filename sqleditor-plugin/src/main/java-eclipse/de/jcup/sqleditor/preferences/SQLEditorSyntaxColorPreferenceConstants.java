@@ -27,7 +27,8 @@ public enum SQLEditorSyntaxColorPreferenceConstants implements PreferenceIdentif
 	COLOR_DOUBLE_QUOTES("colorDoubleQuotes", "Double quotes"),
 	COLOR_COMMENT("colorComments", "Comments"),
 	COLOR_WHERE_BLOCK_KEYWORD("colorWhereBlock","Where block"),
-	COLOR_DATA_TYPE_KEYWORD("colorDataType","Data types");
+	COLOR_DATA_TYPE_KEYWORD("colorDataType","Data types"),
+    COLOR_CUSTOM_KEYWORDS("colorCustomKeywords","Custom keywords");
 	
 	;
 

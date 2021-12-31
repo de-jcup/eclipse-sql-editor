@@ -50,6 +50,7 @@ import org.eclipse.ui.texteditor.MarkerAnnotation;
 
 import de.jcup.sqleditor.document.SQLDocumentIdentifier;
 import de.jcup.sqleditor.document.SQLDocumentIdentifiers;
+import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 import de.jcup.sqleditor.presentation.PresentationSupport;
 import de.jcup.sqleditor.presentation.SQLDefaultTextScanner;
 /**
@@ -60,7 +61,7 @@ import de.jcup.sqleditor.presentation.SQLDefaultTextScanner;
 public class SQLSourceViewerConfiguration extends TextSourceViewerConfiguration {
 
 	
-    private SQLDefaultTextScanner gradleScanner;
+    private SQLDefaultTextScanner scanner;
 	private ColorManager colorManager;
 
 	private TextAttribute defaultTextAttribute;
@@ -173,6 +174,9 @@ public class SQLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 		addPresentation(reconciler, SINGLE_STRING.getId(), getPreferences().getColor(COLOR_SINGLE_QUOTES),SWT.NONE);
 		addPresentation(reconciler, COMMENT.getId(), getPreferences().getColor(COLOR_COMMENT),SWT.NONE);
 		
+		if (SQLEditorPreferences.getInstance().isCustomKeywordSupportEnabled()) {
+		    addPresentation(reconciler, CUSTOM_KEYWORDS.getId(), getPreferences().getColor(COLOR_CUSTOM_KEYWORDS),SWT.NONE);
+		}
 		return reconciler;
 	}
 
@@ -196,19 +200,19 @@ public class SQLSourceViewerConfiguration extends TextSourceViewerConfiguration 
 	}
 
 	private SQLDefaultTextScanner getGradleDefaultTextScanner() {
-		if (gradleScanner == null) {
-			gradleScanner = new SQLDefaultTextScanner(colorManager);
+		if (scanner == null) {
+			scanner = new SQLDefaultTextScanner(colorManager);
 			updateTextScannerDefaultColorToken();
 		}
-		return gradleScanner;
+		return scanner;
 	}
 
 	public void updateTextScannerDefaultColorToken() {
-		if (gradleScanner == null) {
+		if (scanner == null) {
 			return;
 		}
 		RGB color = getPreferences().getColor(COLOR_NORMAL_TEXT);
-		gradleScanner.setDefaultReturnToken(createColorToken(color));
+		scanner.setDefaultReturnToken(createColorToken(color));
 	}
 	
 
