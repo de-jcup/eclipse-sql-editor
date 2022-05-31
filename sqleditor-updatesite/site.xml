@@ -3,5 +3,8 @@
    <feature url="features/de.jcup.sqleditor_1.3.0.jar" id="de.jcup.sqleditor" version="1.3.0">
       <category name="de.jcup.sqleditor.stable"/>
    </feature>
+   <feature url="features/de.jcup.sqleditor_1.4.0.jar" id="de.jcup.sqleditor" version="1.4.0">
+      <category name="de.jcup.sqleditor.stable"/>
+   </feature>
    <category-def name="de.jcup.sqleditor.stable" label="Stable"/>
 </site>
