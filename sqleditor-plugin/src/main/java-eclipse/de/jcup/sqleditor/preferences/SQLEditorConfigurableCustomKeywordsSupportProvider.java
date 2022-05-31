@@ -55,7 +55,7 @@ public class SQLEditorConfigurableCustomKeywordsSupportProvider {
         return cachedTaskTagDefinitions;
     }
 
-    protected void resetTaskTagDefinitions() {
+    protected void resetCustomKeywordDefinitions() {
         cachedTaskTagDefinitions = null;
     }
 

@@ -19,7 +19,6 @@ import static de.jcup.eclipse.commons.ui.SWTFactory.*;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -77,11 +76,11 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
 
     public SQLEditorCustomKeywordsPreferencePage() {
         this.provider = SQLEditorPreferences.getInstance().getCustomKeywordsProvider();
-        
+
         setPreferenceStore(provider.getPreferenceStore());
         setDescription("Here you can define custom SQL keywords. If you change anything here, you have to reopen editors to see changes.");
         setTitle("Custom SQL keywords");
-        
+
         this.definitionWorkingCopy = new ArrayList<>(provider.getTaskTagDefinitions());
         this.customKeywordsEnabled = provider.isCustomSQLeywordSupportEnabled();
     }
@@ -89,8 +88,8 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
     @Override
     protected void performDefaults() {
         definitionWorkingCopy = new ArrayList<>(SQLEditorCustomKeyDefaults.get());
-        customKeywordsEnabled=SQLEditorCustomKeyPreferenceInitializer.DEFAULT_CUSTOM_KEYWORDS_ENABLED;
-        
+        customKeywordsEnabled = SQLEditorCustomKeyPreferenceInitializer.DEFAULT_CUSTOM_KEYWORDS_ENABLED;
+
         propertiesTable.setInput(definitionWorkingCopy);
         btnTodosEnabled.setSelection(this.customKeywordsEnabled);
     }
@@ -98,32 +97,21 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
     @Override
     public boolean performOk() {
 
-        boolean enabledStateAsBefore = customKeywordsEnabled == provider.isCustomSQLeywordSupportEnabled();
-        boolean sameContentAsBefore = checkSameDefinitionsAsBefore();
-        if (!sameContentAsBefore || !enabledStateAsBefore) {
-            String convertListTostring = provider.getConverter().convertListTostring(definitionWorkingCopy);
+        String convertListTostring = provider.getConverter().convertListTostring(definitionWorkingCopy);
 
-            getPreferenceStore().setValue(PREFERENCE_KEY_CUSTOM_KEYWORDS_ENABLED, customKeywordsEnabled);
-            getPreferenceStore().setValue(PREFERENCE_KEY_CUSTOM_KEYWORDS_DEFINITIONS, convertListTostring);
+        getPreferenceStore().setValue(PREFERENCE_KEY_CUSTOM_KEYWORDS_ENABLED, customKeywordsEnabled);
+        getPreferenceStore().setValue(PREFERENCE_KEY_CUSTOM_KEYWORDS_DEFINITIONS, convertListTostring);
 
-            provider.resetTaskTagDefinitions();
-        }
+        provider.resetCustomKeywordDefinitions();
+
         return super.performOk();
-    }
-
-    private boolean checkSameDefinitionsAsBefore() {
-        /* we use a set to check for changes - list does inspect ordering too! */
-        HashSet<SqlEditorCustomKeyDefinition> freshCopy = new HashSet<>(provider.getTaskTagDefinitions());
-        HashSet<SqlEditorCustomKeyDefinition> copiedDefinitionsAsSet = new HashSet<>(definitionWorkingCopy);
-
-        return copiedDefinitionsAsSet.equals(freshCopy);
     }
 
     @Override
     protected void performApply() {
         super.performApply();
     }
-    
+
     @Override
     public void dispose() {
         super.dispose();
@@ -204,7 +192,7 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
     /**
      * Label provider for the table
      */
-    public class TaskTagDefinitionLabelProvider extends LabelProvider implements ITableLabelProvider {
+    public class CustomKeywordDefinitionLabelProvider extends LabelProvider implements ITableLabelProvider {
         public String getColumnText(Object element, int columnIndex) {
             String result = null;
             if (element != null) {
@@ -243,16 +231,16 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
         Composite tableComposite = SWTFactory.createComposite(parent, font, 1, 1, GridData.FILL_BOTH, 0, 0);
         // Create table
         propertiesTable = new TableViewer(tableComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI | SWT.FULL_SELECTION);
-        
+
         Table table = propertiesTable.getTable();
         table.setLayout(new GridLayout());
         table.setLayoutData(new GridData(GridData.FILL_BOTH));
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
         table.setFont(font);
-        
+
         propertiesTable.setContentProvider(new CustomKeywordDefinitionsContentProvider());
-        propertiesTable.setLabelProvider(new TaskTagDefinitionLabelProvider());
+        propertiesTable.setLabelProvider(new CustomKeywordDefinitionLabelProvider());
         propertiesTable.setColumnProperties(new String[] { P_VARIABLE, P_VALUE });
         propertiesTable.setComparator(new ViewerComparator() {
             public int compare(Viewer iviewer, Object e1, Object e2) {
@@ -383,7 +371,7 @@ public class SQLEditorCustomKeywordsPreferencePage extends PreferencePage implem
             SqlEditorCustomKeyDefinition existingVariable = (SqlEditorCustomKeyDefinition) items[i].getData();
             if (existingVariable.getIdentifier().equals(identifier)) {
                 boolean overWrite = MessageDialog.openQuestion(getShell(), "Overwrite task definition?",
-                        MessageFormat.format("A task definition named {0} already exists. Overwrite?", new Object[] { identifier })); //
+                        MessageFormat.format("A custom keyword named {0} already exists. Overwrite?", new Object[] { identifier })); //
                 if (!overWrite) {
                     return false;
                 }
