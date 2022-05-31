@@ -81,7 +81,7 @@ public class TokenBasedSQLFormatter {
                     context.sb.append(tokenText);
                     context.sb.append("\n");
                 } else {
-                    SQLKeyword[] allKeywords = SQLKeyWords.getAll();
+                    SQLKeyword[] allKeywords = SQLKeyWords.getAllDefaultKeywords();
                     if (SQLKeyword.isIdentifiedBy(tokenText, allKeywords)) {
                         handleKeyword(context);
                         lastKeywordBefore=SQLKeyword.fetchKeywordOrNull(tokenText,allKeywords);

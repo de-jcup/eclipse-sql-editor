@@ -106,7 +106,7 @@ public class SQLTextHover implements ITextHover, ITextHoverExtension {
             return "";
         }
 
-        for (DocumentKeyWord keyword : SQLKeyWords.getAll()) {
+        for (DocumentKeyWord keyword : SQLKeyWords.getAllDefaultKeywords()) {
             if (word.equalsIgnoreCase(keyword.getText())) {
                 return buildHoverInfo(keyword);
             }

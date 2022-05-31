@@ -37,9 +37,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
 import de.jcup.eclipse.commons.keyword.DocumentKeyWord;
-import de.jcup.sqleditor.document.keywords.SQLStatementKeywords;
-import de.jcup.sqleditor.document.keywords.SQLWhereBlockKeyWords;
-import de.jcup.sqleditor.document.keywords.SQLStatementTargetKeyWords;
+import de.jcup.sqleditor.document.keywords.SQLKeyWords;
 import de.jcup.sqleditor.preferences.SQLEditorPreferences;
 
 public class SQLEditorSimpleWordContentAssistProcessor implements IContentAssistProcessor, ICompletionListener {
@@ -207,19 +205,24 @@ public class SQLEditorSimpleWordContentAssistProcessor implements IContentAssist
 	}
 
 	protected void addAllSQLKeyWords() {
-		for (DocumentKeyWord keyword : SQLWhereBlockKeyWords.values()) {
-			addKeyWord(keyword);
-		}
-		for (DocumentKeyWord keyword : SQLStatementKeywords.values()) {
-			addKeyWord(keyword);
-		}
-		for (DocumentKeyWord keyword : SQLStatementTargetKeyWords.values()) {
-			addKeyWord(keyword);
-		}
+	    SQLEditorPreferences preferences = SQLEditorPreferences.getInstance();
+	    for (DocumentKeyWord keyword : SQLKeyWords.getAllDefaultKeywords()) {
+	        addKeyWord(keyword);
+	    }
+	    if (preferences.isCustomKeywordSupportEnabled()) {
+            for (DocumentKeyWord keyword : preferences.getCustomKeywords()) {
+                addKeyWord(keyword);
+            }
+        }
+
 	}
 
 	protected void addKeyWord(DocumentKeyWord keyword) {
-		simpleWordCompletion.add(keyword.getText());
+		String text = keyword.getText();
+		if (text==null) {
+		    return;
+		}
+        simpleWordCompletion.add(text.toLowerCase());
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import de.jcup.eclipse.commons.keyword.DocumentKeyWord;
 public class SQLKeyWords {
 	private static final SQLKeyword[] ALL_KEYWORDS = createAllKeywords();
 	
-	public static SQLKeyword[] getAll(){
+	public static SQLKeyword[] getAllDefaultKeywords(){
 		return ALL_KEYWORDS;
 	}
 	
