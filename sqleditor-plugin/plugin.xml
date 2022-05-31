@@ -231,6 +231,18 @@
          </keywordReference>
       </page>
       <page
+         id="sqleditor.eclipse.gradleeditor.preferences.SQLEditorSyntaxStylePreferencePage"
+         class="de.jcup.sqleditor.preferences.SQLEditorSyntaxStylePreferencePage"
+         name="Syntax style"
+         category="sqleditor.eclipse.gradleeditor.preferences.SQLEditorEditorPreferencePage">
+         <keywordReference
+               id="sqleditor.preferences.keyword.SQL">
+         </keywordReference>
+          <keywordReference
+               id="sqleditor.preferences.keyword.style">
+         </keywordReference>
+      </page>
+      <page
          id="de.jcup.sqleditor.preferences.SQLEditorCustomKeywordsPreferencePage"
          class="de.jcup.sqleditor.preferences.SQLEditorCustomKeywordsPreferencePage"
          name="Custom keywords"

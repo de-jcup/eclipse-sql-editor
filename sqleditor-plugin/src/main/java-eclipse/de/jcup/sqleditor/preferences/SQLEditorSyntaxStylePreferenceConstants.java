@@ -18,34 +18,32 @@ package de.jcup.sqleditor.preferences;
 /**
  * Constant definitions for plug-in preferences
  */
-public enum SQLEditorSyntaxColorPreferenceConstants implements PreferenceIdentifiable, PreferenceLabeled{
-	COLOR_NORMAL_TEXT("colorNormalText","Normal tokenText color"),
+public enum SQLEditorSyntaxStylePreferenceConstants implements PreferenceIdentifiable, PreferenceLabeled{
 	
-	COLOR_STATEMENT_KEYWORD("colorStatement", "Statements"),
+	STYLE_STATEMENT_KEYWORD("styleStatement", "Statements"),
 	
-	COLOR_FUNCTION_KEYWORDS("colorFunctions","Functions"),
+	STYLE_FUNCTION_KEYWORDS("styleFunctions","Functions"),
 	
-	COLOR_TARGET_KEYWORD("colorTargets","Targets"),
+	STYLE_TARGET_KEYWORD("styleTargets","Targets"),
 	
-	COLOR_SINGLE_QUOTES("colorSingleQuotes", "Single quotes"),
+	STYLE_SINGLE_QUOTES("styleSingleQuotes", "Single quotes"),
 	
-	COLOR_DOUBLE_QUOTES("colorDoubleQuotes", "Double quotes"),
+	STYLE_DOUBLE_QUOTES("styleDoubleQuotes", "Double quotes"),
 	
-	COLOR_COMMENT("colorComments", "Comments"),
+	STYLE_COMMENT("styleComments", "Comments"),
 	
-	COLOR_WHERE_BLOCK_KEYWORD("colorWhereBlock","Where block"),
+	STYLE_WHERE_BLOCK_KEYWORD("styleWhereBlock","Where block"),
 	
-	COLOR_DATA_TYPE_KEYWORD("colorDataType","Data types"),
+	STYLE_DATA_TYPE_KEYWORD("styleDataType","Data types"),
 	
-    COLOR_CUSTOM_KEYWORDS("colorCustomKeywords","Custom keywords");
-    
+    STYLE_CUSTOM_KEYWORDS("styleCustomKeywords","Custom keywords");
 	
 	;
 
 	private String id;
 	private String labelText;
 
-	private SQLEditorSyntaxColorPreferenceConstants(String id, String labelText) {
+	private SQLEditorSyntaxStylePreferenceConstants(String id, String labelText) {
 		this.id = id;
 		this.labelText=labelText;
 	}

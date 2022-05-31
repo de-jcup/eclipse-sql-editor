@@ -20,6 +20,7 @@ import static de.jcup.sqleditor.SQLEditorColorConstants.*;
 import static de.jcup.sqleditor.SQLEditorUtil.*;
 import static de.jcup.sqleditor.preferences.SQLEditorPreferenceConstants.*;
 import static de.jcup.sqleditor.preferences.SQLEditorSyntaxColorPreferenceConstants.*;
+import static de.jcup.sqleditor.preferences.SQLEditorSyntaxStylePreferenceConstants.*;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -72,6 +73,19 @@ public class SQLEditorPreferenceInitializer extends AbstractPreferenceInitialize
 		preferences.setDefaultColor(COLOR_WHERE_BLOCK_KEYWORD, TASK_DEFAULT_RED);
 		preferences.setDefaultColor(COLOR_TARGET_KEYWORD, DARK_GRAY);
 		preferences.setDefaultColor(COLOR_FUNCTION_KEYWORDS, DARK_BLUE);
+		
+		/* +++++++++++++++++ */
+        /* + Editor Styles + */
+        /* +++++++++++++++++ */
+		preferences.setDefaultStyle(STYLE_DATA_TYPE_KEYWORD, SQLEditorSyntaxStyle.NONE);
+		preferences.setDefaultStyle(STYLE_STATEMENT_KEYWORD, SQLEditorSyntaxStyle.BOLD);
+		preferences.setDefaultStyle(STYLE_TARGET_KEYWORD, SQLEditorSyntaxStyle.BOLD);
+		preferences.setDefaultStyle(STYLE_WHERE_BLOCK_KEYWORD, SQLEditorSyntaxStyle.BOLD);
+		preferences.setDefaultStyle(STYLE_FUNCTION_KEYWORDS, SQLEditorSyntaxStyle.NONE);
+		preferences.setDefaultStyle(STYLE_DOUBLE_QUOTES, SQLEditorSyntaxStyle.NONE);
+		preferences.setDefaultStyle(STYLE_SINGLE_QUOTES, SQLEditorSyntaxStyle.NONE);
+		preferences.setDefaultStyle(STYLE_COMMENT, SQLEditorSyntaxStyle.NONE);
+		preferences.setDefaultStyle(STYLE_CUSTOM_KEYWORDS, SQLEditorSyntaxStyle.BOLD);
 		
 	}
 	
