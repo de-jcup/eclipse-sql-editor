@@ -16,24 +16,28 @@
 package de.jcup.sqleditor.preferences;
 
 import de.jcup.eclipse.commons.preferences.AbstractPreferenceValueConverter;
+import de.jcup.sqleditor.TooltipEscapeSupport;
 
-class SQLEditorCustomKeyDefinitionConverter extends AbstractPreferenceValueConverter<SqlEditorCustomKeyDefinition>{
+class SQLEditorCustomKeyDefinitionConverter extends AbstractPreferenceValueConverter<SqlEditorCustomKeyDefinition> {
 
-	@Override
-	protected void write(SqlEditorCustomKeyDefinition oneEntry,
-			de.jcup.eclipse.commons.preferences.PreferenceDataWriter writer) {
-		writer.writeString(oneEntry.getIdentifier());
-		writer.writeString(oneEntry.getTooltip());
-	}
+    private TooltipEscapeSupport tooltipEscapeSupport = new TooltipEscapeSupport();
 
-	@Override
-	protected SqlEditorCustomKeyDefinition read(
-			de.jcup.eclipse.commons.preferences.PreferenceDataReader reader) {
-		SqlEditorCustomKeyDefinition definition = new SqlEditorCustomKeyDefinition();
-		definition.setIdentifier(reader.readString());
-		definition.setTooltip(reader.readString());
-		return definition;
-	}
-	
+    @Override
+    protected void write(SqlEditorCustomKeyDefinition oneEntry, de.jcup.eclipse.commons.preferences.PreferenceDataWriter writer) {
+        writer.writeString(oneEntry.getIdentifier());
+
+        String notEscapedTooltip = oneEntry.getTooltip();
+        writer.writeString(tooltipEscapeSupport.escapeCommasInTooltip(notEscapedTooltip));
+    }
+
+    @Override
+    protected SqlEditorCustomKeyDefinition read(de.jcup.eclipse.commons.preferences.PreferenceDataReader reader) {
+        SqlEditorCustomKeyDefinition definition = new SqlEditorCustomKeyDefinition();
+        definition.setIdentifier(reader.readString());
+        
+        String escapedTooltip = reader.readString();
+        definition.setTooltip(tooltipEscapeSupport.fetchOriginTooltipFromEscapedString(escapedTooltip));
+        return definition;
+    }
 
 }
